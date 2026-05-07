@@ -1,30 +1,33 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart, Music, Gift, Star, ArrowRight, Sparkles } from "lucide-react";
-import type { Product, HomeContent } from "@/types";
-import { getProducts, getHomeContent } from "@/lib/api";
+import type { Product, HomeContent, CustomSection } from "@/types";
+import { getProducts, getHomeContent, getSections } from "@/lib/api";
 import ProductCard from "@/components/ProductCard";
 import { FloralOrnament, OrnamentDivider, CornerOrnament } from "@/components/Ornaments";
+import { DynamicSection } from "@/components/sections";
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [content, setContent] = useState<HomeContent | null>(null);
+  const [sections, setSections] = useState<CustomSection[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([
       getProducts(),
-      getHomeContent()
+      getHomeContent(),
+      getSections().catch(() => []),
     ])
-      .then(([productsData, contentData]) => {
+      .then(([productsData, contentData, sectionsData]) => {
         setProducts(productsData);
         setContent(contentData);
+        setSections(sectionsData);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
 
-  // Default content if CMS content not loaded
   const heroContent = content?.sections?.hero || {};
   const ctaContent = content?.sections?.cta || {};
 
@@ -32,7 +35,6 @@ export default function Home() {
     <div className="bg-wedding-pattern">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-b from-champagne-light via-cream to-cream py-28 overflow-hidden">
-        {/* Decorative elements */}
         <div className="absolute top-20 left-10 animate-float opacity-40">
           <FloralOrnament size={60} />
         </div>
@@ -46,7 +48,6 @@ export default function Home() {
           <CornerOrnament position="bottom-left" />
         </div>
         
-        {/* Subtle glow effects */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gold/5 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-rose-gold/5 rounded-full blur-3xl" />
@@ -131,6 +132,11 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Dynamic Sections */}
+      {sections.map((section) => (
+        <DynamicSection key={section.id} section={section} />
+      ))}
+
       {/* Products Section */}
       <section className="py-24 bg-cream relative">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
@@ -162,7 +168,6 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="py-24 bg-gradient-to-br from-charcoal via-charcoal-light to-slate relative overflow-hidden">
-        {/* Decorative corner ornaments */}
         <div className="absolute top-0 left-0 opacity-20">
           <CornerOrnament position="top-left" className="w-20 h-20" />
         </div>

@@ -87,3 +87,55 @@ export interface HomeContent {
   };
   hero_features: HomeFeature[];
 }
+
+// Product Image Gallery
+export interface ProductImage {
+  id: number;
+  image: string;
+  image_url: string | null;
+  alt_text: string;
+  is_primary: boolean;
+  order: number;
+}
+
+// Custom Sections
+export type TemplatType =
+  | "hero"
+  | "text_image_left"
+  | "text_image_right"
+  | "features_grid"
+  | "testimonials"
+  | "faq"
+  | "gallery"
+  | "timeline"
+  | "countdown"
+  | "video"
+  | "pricing"
+  | "contact";
+
+export interface SectionImage {
+  id: number;
+  image: string;
+  image_url: string | null;
+  alt_text: string;
+  order: number;
+}
+
+export interface CustomSection {
+  id: number;
+  title: string;
+  anchor: string;
+  template_type: TemplatType;
+  template_type_display: string;
+  content: Record<string, unknown>;
+  order: number;
+  is_active: boolean;
+  images: SectionImage[];
+  created_at: string;
+}
+
+// Order Lookup
+export interface OrderLookupData {
+  email: string;
+  order_number: string;
+}

@@ -68,3 +68,51 @@ class HomeFeature(models.Model):
     
     def __str__(self):
         return self.title
+
+
+class CustomSection(models.Model):
+    TEMPLATE_CHOICES = [
+        ('hero', 'Hero – Vollbild mit Titel & CTA'),
+        ('text_image_left', 'Text + Bild (Bild links)'),
+        ('text_image_right', 'Text + Bild (Bild rechts)'),
+        ('features_grid', 'Features-Grid (3 oder 4 Spalten)'),
+        ('testimonials', 'Testimonials / Bewertungen'),
+        ('faq', 'FAQ Accordion'),
+        ('gallery', 'Bildgalerie'),
+        ('timeline', 'Timeline / Ablauf'),
+        ('countdown', 'Countdown Timer'),
+        ('video', 'Video Embed (YouTube/Vimeo)'),
+        ('pricing', 'Pricing-Tabelle'),
+        ('contact', 'Kontakt-Formular'),
+    ]
+
+    title = models.CharField(max_length=200)
+    anchor = models.SlugField(unique=True)
+    template_type = models.CharField(max_length=50, choices=TEMPLATE_CHOICES)
+    content = models.JSONField(default=dict)
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'Custom Section'
+        verbose_name_plural = 'Custom Sections'
+
+    def __str__(self):
+        return f"{self.title} ({self.get_template_type_display()})"
+
+
+class SectionImage(models.Model):
+    section = models.ForeignKey(
+        CustomSection, on_delete=models.CASCADE, related_name='images'
+    )
+    image = models.ImageField(upload_to='sections/')
+    alt_text = models.CharField(max_length=200, blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.section.title} - Bild {self.order}"

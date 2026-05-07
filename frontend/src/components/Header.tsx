@@ -1,9 +1,29 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { ShoppingCart, Heart, Sparkles } from "lucide-react";
 import { useCart } from "@/store/cart";
+import { getSections } from "@/lib/api";
+import type { CustomSection } from "@/types";
 
 export default function Header() {
   const { totalItems } = useCart();
+  const [sections, setSections] = useState<CustomSection[]>([]);
+  const location = useLocation();
+
+  useEffect(() => {
+    getSections()
+      .then((data) => setSections(data.filter((s) => s.is_active)))
+      .catch(() => {});
+  }, []);
+
+  const handleAnchorClick = (anchor: string) => {
+    if (location.pathname !== "/") {
+      window.location.href = `/#${anchor}`;
+      return;
+    }
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <header className="bg-white/95 backdrop-blur-md border-b border-gold/10 sticky top-0 z-50 shadow-elegant">
@@ -31,6 +51,15 @@ export default function Header() {
           >
             Produkte
           </Link>
+          {sections.map((section) => (
+            <button
+              key={section.id}
+              onClick={() => handleAnchorClick(section.anchor)}
+              className="text-slate hover:text-gold-dark transition-colors font-medium tracking-wide text-sm uppercase"
+            >
+              {section.title}
+            </button>
+          ))}
         </nav>
 
         <Link
