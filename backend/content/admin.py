@@ -55,11 +55,16 @@ class SectionImageInline(admin.TabularInline):
 
 @admin.register(CustomSection)
 class CustomSectionAdmin(admin.ModelAdmin):
-    list_display = ['title', 'anchor', 'template_type', 'order', 'is_active']
+    list_display = ['title', 'anchor', 'template_type', 'order', 'is_active', 'get_site_contents_count']
     list_filter = ['template_type', 'is_active']
     list_editable = ['order', 'is_active']
     prepopulated_fields = {'anchor': ('title',)}
+    filter_horizontal = ['site_contents']
     inlines = [SectionImageInline]
+
+    def get_site_contents_count(self, obj):
+        return obj.site_contents.count()
+    get_site_contents_count.short_description = 'Seiteninhalte'
 
 
 @admin.register(SectionImage)

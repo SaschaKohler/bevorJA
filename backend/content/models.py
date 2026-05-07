@@ -93,6 +93,13 @@ class CustomSection(models.Model):
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    # Beziehung zu Seiteninhalten
+    site_contents = models.ManyToManyField(
+        SiteContent,
+        related_name='custom_sections',
+        blank=True,
+        verbose_name='Zugeordnete Seiteninhalte'
+    )
 
     class Meta:
         ordering = ['order']

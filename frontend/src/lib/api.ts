@@ -171,34 +171,54 @@ export async function getSections(): Promise<CustomSection[]> {
 }
 
 export async function createSection(
-  data: Partial<CustomSection>
+  data: Partial<CustomSection>,
+  token: string
 ): Promise<CustomSection> {
-  return fetchApi<CustomSection>("/api/admin/sections/", {
+  const resp = await fetchApiRaw("/api/admin/sections/", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${token}`,
+    },
     body: JSON.stringify(data),
   });
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  return resp.json();
 }
 
 export async function updateSection(
   id: number,
-  data: Partial<CustomSection>
+  data: Partial<CustomSection>,
+  token: string
 ): Promise<CustomSection> {
-  return fetchApi<CustomSection>(`/api/admin/sections/${id}/`, {
+  const resp = await fetchApiRaw(`/api/admin/sections/${id}/`, {
     method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${token}`,
+    },
     body: JSON.stringify(data),
   });
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  return resp.json();
 }
 
-export async function deleteSection(id: number): Promise<void> {
-  await fetchApiRaw(`/api/admin/sections/${id}/`, { method: "DELETE" });
+export async function deleteSection(id: number, token: string): Promise<void> {
+  const resp = await fetchApiRaw(`/api/admin/sections/${id}/`, {
+    method: "DELETE",
+    headers: { Authorization: `Token ${token}` },
+  });
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
 }
 
 export async function uploadSectionImage(
   sectionId: number,
-  formData: FormData
+  formData: FormData,
+  token: string
 ): Promise<unknown> {
   const resp = await fetchApiRaw(`/api/admin/sections/${sectionId}/images/`, {
     method: "POST",
+    headers: { Authorization: `Token ${token}` },
     body: formData,
   });
   if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
@@ -207,9 +227,31 @@ export async function uploadSectionImage(
 
 export async function deleteSectionImage(
   sectionId: number,
-  imageId: number
+  imageId: number,
+  token: string
 ): Promise<void> {
-  await fetchApiRaw(`/api/admin/sections/${sectionId}/images/${imageId}/`, {
+  const resp = await fetchApiRaw(`/api/admin/sections/${sectionId}/images/${imageId}/`, {
     method: "DELETE",
+    headers: { Authorization: `Token ${token}` },
   });
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+}
+
+// Admin Auth
+interface LoginResponse {
+  token: string;
+  user: { username: string; is_staff: boolean };
+}
+
+export async function adminLogin(password: string): Promise<LoginResponse> {
+  const resp = await fetchApiRaw("/api/admin/login/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ password }),
+  });
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.error || `HTTP ${resp.status}`);
+  }
+  return resp.json();
 }

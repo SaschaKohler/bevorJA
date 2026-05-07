@@ -42,10 +42,19 @@ class CustomSectionSerializer(serializers.ModelSerializer):
     template_type_display = serializers.CharField(
         source='get_template_type_display', read_only=True
     )
+    site_contents = SiteContentSerializer(many=True, read_only=True)
+    site_content_ids = serializers.PrimaryKeyRelatedField(
+        queryset=SiteContent.objects.all(),
+        many=True,
+        write_only=True,
+        source='site_contents',
+        required=False
+    )
 
     class Meta:
         model = CustomSection
         fields = [
             'id', 'title', 'anchor', 'template_type', 'template_type_display',
-            'content', 'order', 'is_active', 'images', 'created_at',
+            'content', 'order', 'is_active', 'images', 'site_contents',
+            'site_content_ids', 'created_at',
         ]

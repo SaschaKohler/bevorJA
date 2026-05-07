@@ -35,6 +35,7 @@ import {
   deleteSection,
   uploadSectionImage,
   deleteSectionImage,
+  adminLogin,
 } from "@/lib/api";
 import type {
   HomeContent,
@@ -95,8 +96,11 @@ function getDefaultContent(templateType: TemplatType): Record<string, unknown> {
 type AdminTab = "content" | "products" | "orders" | "sections";
 
 export default function Admin() {
+  const [authToken, setAuthToken] = useState<string | null>(() => {
+    return localStorage.getItem("admin_token");
+  });
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem("admin_auth") === "true";
+    return !!localStorage.getItem("admin_token");
   });
   const [password, setPassword] = useState("");
   const [activeTab, setActiveTab] = useState<AdminTab>("content");
@@ -129,18 +133,21 @@ export default function Admin() {
     }
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === ADMIN_PASSWORD) {
-      localStorage.setItem("admin_auth", "true");
+    try {
+      const result = await adminLogin(password);
+      localStorage.setItem("admin_token", result.token);
+      setAuthToken(result.token);
       setIsAuthenticated(true);
-    } else {
+    } catch {
       alert("Falsches Passwort");
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("admin_auth");
+    localStorage.removeItem("admin_token");
+    setAuthToken(null);
     setIsAuthenticated(false);
     navigate("/");
   };
@@ -245,7 +252,7 @@ export default function Admin() {
           ) : activeTab === "products" ? (
             <ProductEditor products={products} onUpdate={loadData} onSuccess={showSuccess} />
           ) : activeTab === "sections" ? (
-            <SectionManager onSuccess={showSuccess} />
+            <SectionManager onSuccess={showSuccess} token={authToken || ""} />
           ) : (
             <OrderLookupTab />
           )}
@@ -655,7 +662,7 @@ function ProductEditModal({
   );
 }
 
-function SectionManager({ onSuccess }: { onSuccess: (msg: string) => void }) {
+function SectionManager({ onSuccess, token }: { onSuccess: (msg: string) => void; token: string }) {
   const [sections, setSections] = useState<CustomSection[]>([]);
   const [loading, setLoading] = useState(true);
   const [showTemplateModal, setShowTemplateModal] = useState(false);
@@ -684,7 +691,7 @@ function SectionManager({ onSuccess }: { onSuccess: (msg: string) => void }) {
         content: getDefaultContent(templateType),
         order: sections.length,
         is_active: true,
-      });
+      }, token);
       setSections((prev) => [...prev, newSection]);
       setEditingSection(newSection);
       onSuccess("Section erstellt!");
@@ -702,7 +709,7 @@ function SectionManager({ onSuccess }: { onSuccess: (msg: string) => void }) {
         content: section.content,
         order: section.order,
         is_active: section.is_active,
-      });
+      }, token);
       setSections((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
       setEditingSection(null);
       onSuccess("Section gespeichert!");
@@ -714,7 +721,7 @@ function SectionManager({ onSuccess }: { onSuccess: (msg: string) => void }) {
   const handleDeleteSection = async (id: number) => {
     if (!confirm("Section wirklich l\u00f6schen?")) return;
     try {
-      await deleteSection(id);
+      await deleteSection(id, token);
       setSections((prev) => prev.filter((s) => s.id !== id));
       onSuccess("Section gel\u00f6scht!");
     } catch (error) {
@@ -733,8 +740,8 @@ function SectionManager({ onSuccess }: { onSuccess: (msg: string) => void }) {
     setSections(newSections);
     try {
       await Promise.all([
-        updateSection(newSections[idx].id, { order: newSections[idx].order }),
-        updateSection(newSections[swapIdx].id, { order: newSections[swapIdx].order }),
+        updateSection(newSections[idx].id, { order: newSections[idx].order }, token),
+        updateSection(newSections[swapIdx].id, { order: newSections[swapIdx].order }, token),
       ]);
     } catch (error) {
       console.error("Reorder failed:", error);
@@ -804,7 +811,7 @@ function SectionManager({ onSuccess }: { onSuccess: (msg: string) => void }) {
         <TemplateSelectionModal onSelect={handleCreateSection} onClose={() => setShowTemplateModal(false)} />
       )}
       {editingSection && (
-        <SectionEditModal section={editingSection} onClose={() => setEditingSection(null)} onSave={handleUpdateSection} />
+        <SectionEditModal section={editingSection} onClose={() => setEditingSection(null)} onSave={handleUpdateSection} token={token} />
       )}
     </div>
   );
@@ -841,10 +848,12 @@ function SectionEditModal({
   section,
   onClose,
   onSave,
+  token,
 }: {
   section: CustomSection;
   onClose: () => void;
   onSave: (section: CustomSection) => void;
+  token: string;
 }) {
   const [title, setTitle] = useState(section.title);
   const [anchor, setAnchor] = useState(section.anchor);
@@ -865,7 +874,7 @@ function SectionEditModal({
     const formData = new FormData();
     formData.append("image", file);
     try {
-      const img = await uploadSectionImage(section.id, formData);
+      const img = await uploadSectionImage(section.id, formData, token);
       setSectionImages((prev) => [...prev, img as CustomSection["images"][number]]);
     } catch (error) {
       console.error("Upload failed:", error);
@@ -875,7 +884,7 @@ function SectionEditModal({
 
   const handleDeleteImage = async (imageId: number) => {
     try {
-      await deleteSectionImage(section.id, imageId);
+      await deleteSectionImage(section.id, imageId, token);
       setSectionImages((prev) => prev.filter((img) => img.id !== imageId));
     } catch (error) {
       console.error("Delete failed:", error);

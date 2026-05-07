@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .models import SiteContent, HomeFeature, CustomSection, SectionImage
@@ -64,7 +64,7 @@ def get_home_content(request):
 
 
 @api_view(['PATCH'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAuthenticated])
 def update_content(request, pk):
     """Update a specific content item"""
     content = get_object_or_404(SiteContent, pk=pk)
@@ -91,8 +91,9 @@ def list_sections(request):
 
 
 @api_view(['POST'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAuthenticated])
 def admin_create_section(request):
+    print(f"DEBUG: User={request.user}, Auth={request.auth}, Headers={request.headers.get('Authorization', 'NONE')}")
     serializer = CustomSectionSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     serializer.save()
@@ -100,7 +101,7 @@ def admin_create_section(request):
 
 
 @api_view(['PATCH', 'DELETE'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAuthenticated])
 def admin_manage_section(request, pk):
     section = get_object_or_404(CustomSection, pk=pk)
 
@@ -113,12 +114,16 @@ def admin_manage_section(request, pk):
         if field in request.data:
             setattr(section, field, request.data[field])
 
+    # Handle site_contents many-to-many relationship
+    if 'site_content_ids' in request.data:
+        section.site_contents.set(request.data['site_content_ids'])
+
     section.save()
     return Response(CustomSectionSerializer(section).data)
 
 
 @api_view(['POST'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAuthenticated])
 @parser_classes([MultiPartParser, FormParser])
 def admin_upload_section_image(request, pk):
     section = get_object_or_404(CustomSection, pk=pk)
@@ -141,7 +146,7 @@ def admin_upload_section_image(request, pk):
 
 
 @api_view(['DELETE'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsAuthenticated])
 def admin_delete_section_image(request, pk, image_id):
     section = get_object_or_404(CustomSection, pk=pk)
     img = get_object_or_404(SectionImage, id=image_id, section=section)
