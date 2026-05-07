@@ -1,5 +1,6 @@
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 
 from products.models import Product
@@ -59,3 +60,40 @@ def order_detail(request, order_number):
             status=status.HTTP_404_NOT_FOUND,
         )
     return Response(OrderSerializer(order).data)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def order_lookup(request):
+    email = request.data.get("email", "").strip()
+    order_number = request.data.get("order_number", "").strip()
+
+    if not email or not order_number:
+        return Response(
+            {"error": "E-Mail und Bestellnummer sind erforderlich"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    try:
+        order = Order.objects.get(email__iexact=email, order_number=order_number)
+    except Order.DoesNotExist:
+        return Response(
+            {"error": "Bestellung nicht gefunden"},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+    return Response(OrderSerializer(order).data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAdminUser])
+def orders_by_email(request):
+    email = request.query_params.get("email", "").strip()
+    if not email:
+        return Response(
+            {"error": "E-Mail Parameter ist erforderlich"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+    orders = Order.objects.filter(email__iexact=email)
+    return Response(OrderSerializer(orders, many=True).data)

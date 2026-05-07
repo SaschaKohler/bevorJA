@@ -10,4 +10,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('home/', views.get_home_content, name='home-content'),
     path('admin/content/<int:pk>/', views.update_content, name='update-content'),
+    path('sections/', views.list_sections, name='list-sections'),
 ]
