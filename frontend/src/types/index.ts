@@ -60,3 +60,30 @@ export interface Order {
   items: OrderItem[];
   created_at: string;
 }
+
+// CMS Content Types
+export interface SiteContentItem {
+  content: string;
+  content_en?: string;
+  image?: string;
+}
+
+export interface SiteContentSection {
+  [key: string]: SiteContentItem;
+}
+
+export interface HomeFeature {
+  id: number;
+  icon: string;
+  title: string;
+  description: string;
+  order: number;
+  is_active: boolean;
+}
+
+export interface HomeContent {
+  sections: {
+    [section: string]: SiteContentSection;
+  };
+  hero_features: HomeFeature[];
+}

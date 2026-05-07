@@ -1,4 +1,4 @@
-import type { Product, Order, OrderCreateData } from "@/types";
+import type { Product, Order, OrderCreateData, HomeContent } from "@/types";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
@@ -67,4 +67,21 @@ interface StripeConfig {
 
 export async function getStripeConfig(): Promise<StripeConfig> {
   return fetchApi<StripeConfig>("/api/payments/config/");
+}
+
+// CMS Content API
+export async function getHomeContent(): Promise<HomeContent> {
+  return fetchApi<HomeContent>("/api/content/home/");
+}
+
+export async function updateContent(id: number, data: Partial<SiteContentItem>): Promise<SiteContentItem> {
+  return fetchApi<SiteContentItem>(`/api/admin/content/${id}/`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+interface SiteContentItem {
+  content: string;
+  content_en?: string;
 }
