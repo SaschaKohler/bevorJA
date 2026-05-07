@@ -1,10 +1,10 @@
-import json
 import logging
 
 import stripe
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 
 from orders.models import Order
@@ -41,7 +41,13 @@ def create_checkout_session(request):
 
     line_items = []
     for item in items:
-        product = Product.objects.get(id=item["product_id"])
+        try:
+            product = Product.objects.get(id=item["product_id"])
+        except Product.DoesNotExist:
+            return Response(
+                {"error": f"Produkt {item['product_id']} nicht gefunden"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         line_items.append(
             {
                 "price_data": {
@@ -80,7 +86,10 @@ def create_checkout_session(request):
         )
 
 
+@csrf_exempt
 @api_view(["POST"])
+@authentication_classes([])
+@permission_classes([])
 def stripe_webhook(request):
     stripe.api_key = settings.STRIPE_SECRET_KEY
     payload = request.body

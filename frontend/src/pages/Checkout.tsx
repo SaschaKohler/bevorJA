@@ -45,24 +45,23 @@ export default function Checkout() {
         items: orderItems,
       });
 
-      const checkout = await createCheckoutSession(order.id, orderItems);
-
-      if (checkout.url) {
-        clearCart();
-        window.location.href = checkout.url;
-      } else {
-        clearCart();
-        navigate(`/bestellung/erfolg?order=${order.order_number}`);
+      try {
+        const checkout = await createCheckoutSession(order.id, orderItems);
+        if (checkout.url) {
+          clearCart();
+          window.location.href = checkout.url;
+          return;
+        }
+      } catch {
+        // Stripe not configured - show order confirmation without payment
       }
+
+      clearCart();
+      navigate(`/bestellung/erfolg?order=${order.order_number}&pending=true`);
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Ein Fehler ist aufgetreten";
-      if (message.includes("Stripe") || message.includes("stripe")) {
-        clearCart();
-        navigate(`/bestellung/erfolg?demo=true`);
-      } else {
-        setError(message);
-      }
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -231,7 +230,7 @@ export default function Checkout() {
                 Wird verarbeitet...
               </>
             ) : (
-              `Jetzt bezahlen - ${formatPrice(totalPrice)}`
+              `Jetzt bestellen - ${formatPrice(totalPrice)}`
             )}
           </button>
         </form>

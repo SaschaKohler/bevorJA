@@ -13,6 +13,13 @@ def create_order(request):
     serializer.is_valid(raise_exception=True)
     data = serializer.validated_data
 
+    for item_data in data["items"]:
+        if not Product.objects.filter(id=item_data["product_id"]).exists():
+            return Response(
+                {"error": f"Produkt {item_data['product_id']} nicht gefunden"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
     order = Order.objects.create(
         first_name=data["first_name"],
         last_name=data["last_name"],
