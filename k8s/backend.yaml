@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vorja-backend
+  namespace: vorja
+  labels:
+    app: vorja-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vorja-backend
+  template:
+    metadata:
+      labels:
+        app: vorja-backend
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/saschakohler/vorja-backend:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: vorja-backend-secrets
+          env:
+            - name: DJANGO_ALLOWED_HOSTS
+              value: "vorja.ja-zum-leben.at,localhost"
+            - name: DATABASE_PATH
+              value: "/data/db.sqlite3"
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: vorja-backend-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vorja-backend
+  namespace: vorja
+spec:
+  selector:
+    app: vorja-backend
+  ports:
+    - port: 8000
+      targetPort: 8000
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vorja-backend-data
+  namespace: vorja
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi

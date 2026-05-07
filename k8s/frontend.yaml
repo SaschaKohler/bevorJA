@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vorja-frontend
+  namespace: vorja
+  labels:
+    app: vorja-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vorja-frontend
+  template:
+    metadata:
+      labels:
+        app: vorja-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: ghcr.io/saschakohler/vorja-frontend:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vorja-frontend
+  namespace: vorja
+spec:
+  selector:
+    app: vorja-frontend
+  ports:
+    - port: 80
+      targetPort: 80
