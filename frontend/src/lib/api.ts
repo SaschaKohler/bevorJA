@@ -6,6 +6,15 @@ import type {
   OrderLookupData,
   ProductImage,
   CustomSection,
+  // NEW: Flexible Framework
+  Occasion,
+  OccasionDetail,
+  BoxType,
+  CardPackage,
+  ProductVariant,
+  ProductVariantListItem,
+  ProductVariantImage,
+  ConfiguratorData,
 } from "@/types";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
@@ -104,6 +113,62 @@ export async function orderLookup(data: OrderLookupData): Promise<Order> {
     method: "POST",
     body: JSON.stringify(data),
   });
+}
+
+// NEW: Flexible Framework APIs
+export async function getOccasions(): Promise<Occasion[]> {
+  const data = await fetchApi<PaginatedResponse<Occasion>>("/api/products/occasions/");
+  return data.results;
+}
+
+export async function getOccasion(slug: string): Promise<OccasionDetail> {
+  return fetchApi<OccasionDetail>(`/api/products/occasions/${slug}/`);
+}
+
+export async function getBoxTypes(): Promise<BoxType[]> {
+  const data = await fetchApi<PaginatedResponse<BoxType>>("/api/products/box-types/");
+  return data.results;
+}
+
+export async function getCardPackages(occasionSlug?: string): Promise<CardPackage[]> {
+  const url = occasionSlug
+    ? `/api/products/card-packages/?occasion=${occasionSlug}`
+    : "/api/products/card-packages/";
+  const data = await fetchApi<PaginatedResponse<CardPackage>>(url);
+  return data.results;
+}
+
+export async function getProductVariants(
+  filters?: {
+    occasion?: string;
+    box_type?: string;
+    card_count?: number;
+    is_default?: boolean;
+  }
+): Promise<ProductVariantListItem[]> {
+  const params = new URLSearchParams();
+  if (filters?.occasion) params.append("occasion", filters.occasion);
+  if (filters?.box_type) params.append("box_type", filters.box_type);
+  if (filters?.card_count) params.append("card_count", filters.card_count.toString());
+  if (filters?.is_default) params.append("is_default", "true");
+
+  const query = params.toString();
+  const url = query ? `/api/products/variants/?${query}` : "/api/products/variants/";
+
+  const data = await fetchApi<PaginatedResponse<ProductVariantListItem>>(url);
+  return data.results;
+}
+
+export async function getProductVariant(slug: string): Promise<ProductVariant> {
+  return fetchApi<ProductVariant>(`/api/products/variants/${slug}/`);
+}
+
+export async function getConfiguratorData(): Promise<ConfiguratorData> {
+  return fetchApi<ConfiguratorData>("/api/products/configurator/");
+}
+
+export async function getVariantImages(slug: string): Promise<ProductVariantImage[]> {
+  return fetchApi<ProductVariantImage[]>(`/api/products/variants/${slug}/images/`);
 }
 
 // Product Image API

@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 
-from products.models import Product
+from products.models import Product, ProductVariant, Occasion
 
 
 class Order(models.Model):
@@ -35,6 +35,22 @@ class Order(models.Model):
     notes = models.TextField(blank=True)
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
+    # NEU: Referenz zum Anlass
+    occasion = models.ForeignKey(
+        Occasion,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="orders"
+    )
+
+    # NEU: Personalisierungs-Details als JSON
+    customization_details = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text='{"engraving": "Text", "box_color": "natur", "selected_design": "elegant"}'
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -47,9 +63,25 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    # LEGACY: Altes Produkt-Modell (für Rückwärtskompatibilität)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT, null=True, blank=True)
+    # NEU: Flexible Produkt-Variante
+    product_variant = models.ForeignKey(
+        ProductVariant,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="order_items"
+    )
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=8, decimal_places=2)
+
+    # NEU: Ausgewählte Personalisierung für dieses Item
+    item_customization = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text='{"engraving_text": "...", "selected_design": "elegant", "box_color": "natur"}'
+    )
 
     def __str__(self):
         return f"{self.quantity}x {self.product.name}"

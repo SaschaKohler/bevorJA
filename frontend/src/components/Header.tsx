@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ShoppingCart, Heart, Sparkles } from "lucide-react";
+import { ShoppingCart, Heart, Sparkles, Package, Lock } from "lucide-react";
 import { useCart } from "@/store/cart";
 import { getSections } from "@/lib/api";
 import type { CustomSection } from "@/types";
@@ -62,18 +62,36 @@ export default function Header() {
           ))}
         </nav>
 
-        <Link
-          to="/warenkorb"
-          className="relative flex items-center gap-2 bg-gradient-to-r from-gold to-gold-dark text-white px-5 py-2.5 rounded-full hover:shadow-lg hover:shadow-gold/30 transition-all duration-300 hover:-translate-y-0.5"
-        >
-          <ShoppingCart className="w-5 h-5" />
-          <span className="text-sm font-medium">Warenkorb</span>
-          {totalItems > 0 && (
-            <span className="absolute -top-2 -right-2 bg-rose-gold text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-md">
-              {totalItems}
-            </span>
-          )}
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link
+            to="/bestellung/suchen"
+            className="hidden sm:flex items-center gap-1.5 text-slate hover:text-gold-dark transition-colors"
+          >
+            <Package className="w-4 h-4" />
+            <span className="text-sm">Bestellung</span>
+          </Link>
+
+          <Link
+            to="/admin"
+            className="text-slate hover:text-gold-dark transition-colors"
+            title="Admin"
+          >
+            <Lock className="w-4 h-4" />
+          </Link>
+
+          <Link
+            to="/warenkorb"
+            className="relative flex items-center gap-2 bg-gradient-to-r from-gold to-gold-dark text-white px-5 py-2.5 rounded-full hover:shadow-lg hover:shadow-gold/30 transition-all duration-300 hover:-translate-y-0.5"
+          >
+            <ShoppingCart className="w-5 h-5" />
+            <span className="text-sm font-medium">Warenkorb</span>
+            {totalItems > 0 && (
+              <span className="absolute -top-2 -right-2 bg-rose-gold text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-md">
+                {totalItems}
+              </span>
+            )}
+          </Link>
+        </div>
       </div>
     </header>
   );

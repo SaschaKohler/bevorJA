@@ -1,12 +1,14 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, Package, Palette, PenTool } from "lucide-react";
 import { useCart } from "@/store/cart";
+import { useOccasion } from "@/store/occasion";
 import { formatPrice } from "@/lib/utils";
 import { createOrder, createCheckoutSession } from "@/lib/api";
 
 export default function Checkout() {
-  const { items, totalPrice, clearCart } = useCart();
+  const { items, totalPrice, clearCart, selectedOccasion: cartOccasion } = useCart();
+  const { selectedOccasion: occasionContext } = useOccasion();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -35,15 +37,32 @@ export default function Checkout() {
     setError("");
 
     try {
+      // NEW: Flexible Framework - send variant data with customizations
       const orderItems = items.map((item) => ({
         product_id: item.product.id,
         quantity: item.quantity,
+        // NEW: Include variant and customization data
+        variant_id: item.variant?.id,
+        customization: item.customization || undefined,
       }));
 
-      const order = await createOrder({
+      // Get primary occasion (from cart or occasion context)
+      const primaryOccasion = cartOccasion || occasionContext;
+
+      const orderData = {
         ...form,
         items: orderItems,
-      });
+        // NEW: Include occasion if available
+        ...(primaryOccasion && { occasion_id: primaryOccasion.id }),
+        // NEW: Include customization summary
+        customization_details: items.some(i => i.customization) ? {
+          has_engraving: items.some(i => i.customization?.engraving_text),
+          has_color_choice: items.some(i => i.customization?.box_color),
+          has_design: items.some(i => i.customization?.selected_design),
+        } : undefined,
+      };
+
+      const order = await createOrder(orderData);
 
       try {
         const checkout = await createCheckoutSession(order.id, orderItems);
@@ -240,17 +259,55 @@ export default function Checkout() {
             <h2 className="font-serif text-lg text-warm-700 mb-4">
               Bestelluebersicht
             </h2>
-            <div className="space-y-3 mb-4">
-              {items.map((item) => (
-                <div key={item.product.id} className="flex justify-between text-sm">
-                  <span className="text-warm-600">
-                    {item.quantity}x {item.product.name}
-                  </span>
-                  <span className="text-warm-800 font-medium">
-                    {formatPrice(parseFloat(item.product.price) * item.quantity)}
-                  </span>
+            {/* NEW: Show selected occasion */}
+            {(cartOccasion || occasionContext) && (
+              <div className="mb-4 pb-4 border-b border-warm-100">
+                <span className="text-xs text-warm-400 uppercase tracking-wide">Anlass</span>
+                <div className="font-medium text-warm-700">
+                  {(cartOccasion || occasionContext)?.name}
                 </div>
-              ))}
+              </div>
+            )}
+
+            <div className="space-y-3 mb-4">
+              {items.map((item) => {
+                const itemPrice = item.variant?.calculated_price || item.product.price;
+                return (
+                  <div key={item.product.id} className="text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-warm-600">
+                        {item.quantity}x {item.variant?.name || item.product.name}
+                      </span>
+                      <span className="text-warm-800 font-medium">
+                        {formatPrice(parseFloat(itemPrice) * item.quantity)}
+                      </span>
+                    </div>
+                    {/* NEW: Show customization details */}
+                    {item.customization && (
+                      <div className="mt-1 text-xs text-warm-400 space-y-0.5">
+                        {item.customization.engraving_text && (
+                          <div className="flex items-center gap-1">
+                            <PenTool className="w-3 h-3" />
+                            <span>Gravur: {item.customization.engraving_text}</span>
+                          </div>
+                        )}
+                        {item.customization.box_color && (
+                          <div className="flex items-center gap-1">
+                            <Palette className="w-3 h-3" />
+                            <span>Farbe: {item.customization.box_color}</span>
+                          </div>
+                        )}
+                        {item.customization.selected_design && (
+                          <div className="flex items-center gap-1">
+                            <Package className="w-3 h-3" />
+                            <span>Design: {item.customization.selected_design}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
             <div className="border-t border-warm-200 pt-3">
               <div className="flex justify-between">

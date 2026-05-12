@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { CartProvider } from "@/store/cart";
+import { OccasionProvider } from "@/store/occasion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Home from "@/pages/Home";
@@ -8,17 +9,21 @@ import ProductDetail from "@/pages/ProductDetail";
 import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
 import OrderConfirmation from "@/pages/OrderConfirmation";
-import Admin from "@/pages/Admin";
+import OrderLookupPage from "@/pages/OrderLookupPage";
+import AdminRoutes from "@/pages/admin";
 
 function Layout() {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
   
   if (isAdmin) {
+    // For admin routes, just render the outlet (child routes)
     return (
-      <Routes>
-        <Route path="/admin/*" element={<Admin />} />
-      </Routes>
+      <div className="min-h-screen">
+        <Routes>
+          <Route path="/admin/*" element={<AdminRoutes />} />
+        </Routes>
+      </div>
     );
   }
   
@@ -33,6 +38,7 @@ function Layout() {
           <Route path="/warenkorb" element={<Cart />} />
           <Route path="/kasse" element={<Checkout />} />
           <Route path="/bestellung/erfolg" element={<OrderConfirmation />} />
+          <Route path="/bestellung/suchen" element={<OrderLookupPage />} />
         </Routes>
       </main>
       <Footer />
@@ -42,10 +48,12 @@ function Layout() {
 
 export default function App() {
   return (
-    <CartProvider>
-      <BrowserRouter>
-        <Layout />
-      </BrowserRouter>
-    </CartProvider>
+    <OccasionProvider>
+      <CartProvider>
+        <BrowserRouter>
+          <Layout />
+        </BrowserRouter>
+      </CartProvider>
+    </OccasionProvider>
   );
 }
