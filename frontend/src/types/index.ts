@@ -326,3 +326,77 @@ export interface AdminUser {
   is_staff: boolean;
   role?: "superadmin" | "content_manager" | "product_manager" | "order_manager";
 }
+
+// Admin extended types
+export interface AdminOccasion extends Occasion {
+  meta_title?: string;
+  meta_description?: string;
+}
+
+export interface AdminSiteContent {
+  id: number;
+  section: string;
+  section_display: string;
+  key: string;
+  key_display: string;
+  content: string;
+  content_en?: string;
+  image?: string;
+  order: number;
+  is_active: boolean;
+}
+
+export interface AdminCustomer {
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  total_orders: number;
+  total_spent: string;
+  last_order_at: string | null;
+  tags: string[];
+}
+
+export interface AdminCustomerDetail extends AdminCustomer {
+  orders: Order[];
+  notes?: string;
+}
+
+export interface AdminMedia {
+  id: number;
+  file: string;
+  file_url: string;
+  title: string;
+  alt_text: string;
+  tags: string;
+  width?: number;
+  height?: number;
+  file_size?: number;
+  uploaded_at: string;
+}
+
+export interface AdminSettings {
+  shop: {
+    currency: string;
+    tax_rate: number;
+    shipping_cost: number;
+  };
+  seo: {
+    meta_title: string;
+    meta_description: string;
+  };
+}
+
+export interface Page {
+  id: number;
+  title: string;
+  slug: string;
+  meta_title: string;
+  meta_description: string;
+  template: "default" | "landing" | "shop";
+  is_published: boolean;
+  published_at: string | null;
+  show_in_nav: boolean;
+  nav_order: number;
+  sections_count: number;
+}

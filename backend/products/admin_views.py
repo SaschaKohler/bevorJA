@@ -173,3 +173,61 @@ def admin_variant_detail(request, pk):
     elif request.method == 'DELETE':
         variant.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# === BOX TYPE DETAIL ADMIN VIEWS ===
+
+@api_view(['GET', 'PATCH', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def admin_boxtype_detail(request, pk):
+    """
+    Retrieve, update or delete a box type.
+    """
+    box_type = get_object_or_404(BoxType, pk=pk)
+
+    if request.method == 'GET':
+        serializer = BoxTypeSerializer(box_type)
+        return Response(serializer.data)
+
+    elif request.method == 'PATCH':
+        serializer = BoxTypeSerializer(box_type, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        box_type.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# === CARD PACKAGE DETAIL ADMIN VIEWS ===
+
+@api_view(['GET', 'PATCH', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def admin_cardpackage_detail(request, pk):
+    """
+    Retrieve, update or delete a card package.
+    """
+    package = get_object_or_404(CardPackage, pk=pk)
+
+    if request.method == 'GET':
+        serializer = CardPackageSerializer(package)
+        return Response(serializer.data)
+
+    elif request.method == 'PATCH':
+        # Extract occasion_ids before passing data to serializer
+        data = request.data.copy()
+        occasion_ids = data.pop('occasion_ids', None)
+
+        serializer = CardPackageSerializer(package, data=data, partial=True)
+        if serializer.is_valid():
+            instance = serializer.save()
+            if occasion_ids is not None:
+                instance.occasions.set(occasion_ids)
+            return Response(CardPackageSerializer(instance).data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        package.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

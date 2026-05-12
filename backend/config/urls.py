@@ -20,12 +20,26 @@ from products.admin_views import (
     admin_occasions_list,
     admin_occasion_detail,
     admin_boxtypes_list,
+    admin_boxtype_detail,
     admin_cardpackages_list,
+    admin_cardpackage_detail,
     admin_variants_list,
+    admin_variant_detail,
 )
 from orders.admin_views import (
     admin_dashboard_stats,
     admin_orders_list,
+    admin_order_detail,
+    admin_order_status_update,
+    admin_charts_data,
+    admin_customers_list,
+    admin_customer_detail,
+)
+from content.admin_views import (
+    admin_site_content_list,
+    admin_site_content_detail,
+    admin_sections_list,
+    admin_section_reorder,
 )
 
 urlpatterns = [
@@ -57,6 +71,25 @@ urlpatterns = [
     path("api/admin/box-types/", admin_boxtypes_list, name="admin-boxtypes-list"),
     path("api/admin/card-packages/", admin_cardpackages_list, name="admin-cardpackages-list"),
     path("api/admin/variants/", admin_variants_list, name="admin-variants-list"),
+    path("api/admin/variants/<int:pk>/", admin_variant_detail, name="admin-variant-detail"),
+    # Admin box types detail
+    path("api/admin/box-types/<int:pk>/", admin_boxtype_detail, name="admin-boxtype-detail"),
+    # Admin card packages detail
+    path("api/admin/card-packages/<int:pk>/", admin_cardpackage_detail, name="admin-cardpackage-detail"),
+    # Admin orders detail & status workflow
+    path("api/admin/orders/<int:pk>/", admin_order_detail, name="admin-order-detail"),
+    path("api/admin/orders/<int:pk>/status/", admin_order_status_update, name="admin-order-status"),
+    # Admin charts
+    path("api/admin/charts/", admin_charts_data, name="admin-charts"),
+    # Admin customers
+    path("api/admin/customers/", admin_customers_list, name="admin-customers-list"),
+    path("api/admin/customers/<str:email>/", admin_customer_detail, name="admin-customer-detail"),
+    # Admin site content
+    path("api/admin/site-content/", admin_site_content_list, name="admin-site-content-list"),
+    path("api/admin/site-content/<int:pk>/", admin_site_content_detail, name="admin-site-content-detail"),
+    # Admin sections (extended)
+    path("api/admin/sections/list/", admin_sections_list, name="admin-sections-list"),
+    path("api/admin/sections/reorder/", admin_section_reorder, name="admin-sections-reorder"),
 ]
 
 if settings.DEBUG:
