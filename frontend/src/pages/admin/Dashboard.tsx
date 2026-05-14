@@ -210,7 +210,7 @@ export default function Dashboard() {
                     border: "1px solid #e5e7eb",
                     borderRadius: "8px",
                   }}
-                  formatter={(value: number) => [`€${value}`, "Umsatz"]}
+                  formatter={(value) => [`€${Number(value)}`, "Umsatz"]}
                 />
                 <Line
                   type="monotone"

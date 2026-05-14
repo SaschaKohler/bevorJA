@@ -246,7 +246,6 @@ function CardPackageModal({
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const queryClient = useQueryClient();
 
   // Auto-generate slug from name
   const generateSlug = (name: string) => {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ShoppingBag, Loader2, Search, Filter, X, Copy, ChevronLeft, ChevronRight, Package, User, Calendar, DollarSign } from "lucide-react";
+import { ShoppingBag, Loader2, Search, Filter, X, Copy, ChevronLeft, ChevronRight, Package, User, Calendar } from "lucide-react";
 import type { Order } from "@/types";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";

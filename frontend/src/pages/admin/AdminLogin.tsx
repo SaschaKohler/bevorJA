@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { LayoutDashboard, Loader2 } from "lucide-react";
 import { adminLogin } from "@/lib/api";
 
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || "admin";
-
 export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
