@@ -3,9 +3,32 @@ import type { CustomSection } from "@/types";
 
 export default function SectionHero({ section }: { section: CustomSection }) {
   const c = section.content as Record<string, string>;
+  const bgImage = section.images?.[0];
   return (
-    <section id={section.anchor} className="relative py-28 bg-gradient-to-b from-champagne-light via-cream to-cream overflow-hidden">
-      <div className="max-w-4xl mx-auto px-4 text-center">
+    <section
+      id={section.anchor}
+      className="relative py-28 overflow-hidden"
+    >
+      {/* Background image */}
+      {bgImage && (
+        <div className="absolute inset-0">
+          <img
+            src={bgImage.image_url || bgImage.image}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+          {/* gradient overlay so text stays readable */}
+          <div className="absolute inset-0 bg-gradient-to-b from-champagne-light/80 via-cream/70 to-cream/90" />
+        </div>
+      )}
+
+      {/* Fallback background when no image */}
+      {!bgImage && (
+        <div className="absolute inset-0 bg-gradient-to-b from-champagne-light via-cream to-cream" />
+      )}
+
+      {/* Content */}
+      <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
         {c.headline && (
           <h2 className="font-display text-5xl md:text-7xl text-charcoal mb-6">{c.headline}</h2>
         )}
@@ -22,11 +45,6 @@ export default function SectionHero({ section }: { section: CustomSection }) {
           </a>
         )}
       </div>
-      {section.images?.[0] && (
-        <div className="absolute inset-0 -z-10 opacity-20">
-          <img src={section.images[0].image_url || section.images[0].image} alt="" className="w-full h-full object-cover" />
-        </div>
-      )}
     </section>
   );
 }

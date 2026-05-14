@@ -10,7 +10,6 @@ import CardPackagesTab from "./products/CardPackagesTab";
 import ProductVariantsTab from "./products/ProductVariantsTab";
 import OrdersTab from "./orders/OrdersTab";
 import SectionsTab from "./content/SectionsTab";
-import SiteContentTab from "./content/SiteContentTab";
 import PagesTab from "./content/PagesTab";
 import MediathekTab from "./content/MediathekTab";
 import CustomersTab from "./customers/CustomersTab";
@@ -72,7 +71,6 @@ function AdminRoutes() {
 
           {/* Content */}
           <Route path="/sections" element={<SectionsTab />} />
-          <Route path="/content" element={<SiteContentTab />} />
           <Route path="/pages" element={<PagesTab />} />
           <Route path="/mediathek" element={<MediathekTab />} />
 
@@ -88,8 +86,8 @@ function AdminRoutes() {
 function PlaceholderTab({ title, description }: { title: string; description?: string }) {
   return (
     <div className="text-center py-12">
-      <h2 className="font-display text-xl text-charcoal dark:text-white mb-4">{title}</h2>
-      <p className="text-slate">{description || "Dieser Bereich wird in Kürze implementiert."}</p>
+      <h2 className="font-display text-xl text-charcoal mb-4">{title}</h2>
+      <p className="text-charcoal-light">{description || "Dieser Bereich wird in Kürze implementiert."}</p>
     </div>
   );
 }

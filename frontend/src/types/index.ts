@@ -195,16 +195,6 @@ export interface Order {
 }
 
 // CMS Content Types
-export interface SiteContentItem {
-  content: string;
-  content_en?: string;
-  image?: string;
-}
-
-export interface SiteContentSection {
-  [key: string]: SiteContentItem;
-}
-
 export interface HomeFeature {
   id: number;
   icon: string;
@@ -215,10 +205,13 @@ export interface HomeFeature {
 }
 
 export interface HomeContent {
-  sections: {
-    [section: string]: SiteContentSection;
-  };
   hero_features: HomeFeature[];
+  page?: {
+    id: number;
+    title: string;
+    slug: string;
+  };
+  sections: CustomSection[];
 }
 
 // Product Image Gallery
@@ -256,6 +249,8 @@ export interface SectionImage {
 
 export interface CustomSection {
   id: number;
+  page_id: number;
+  page_title?: string;
   title: string;
   anchor: string;
   template_type: TemplatType;
@@ -331,19 +326,6 @@ export interface AdminUser {
 export interface AdminOccasion extends Occasion {
   meta_title?: string;
   meta_description?: string;
-}
-
-export interface AdminSiteContent {
-  id: number;
-  section: string;
-  section_display: string;
-  key: string;
-  key_display: string;
-  content: string;
-  content_en?: string;
-  image?: string;
-  order: number;
-  is_active: boolean;
 }
 
 export interface AdminCustomer {

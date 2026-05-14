@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Plus, Pencil, Trash2, Layers, Loader2,
   ChevronUp, ChevronDown, Check, X,
   Image, AlignLeft, Grid, MessageSquare,
   HelpCircle, Clock, Video, Tag, Mail,
-  Star, LayoutTemplate,
+  Star, LayoutTemplate, Upload,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import type { CustomSection, TemplatType } from "@/types";
+import type { CustomSection, TemplatType, Page } from "@/types";
+import { getAdminPages } from "@/lib/api";
+import MediaPickerModal from "@/components/admin/MediaPickerModal";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -39,7 +41,7 @@ const TEMPLATE_COLORS: Record<string, string> = {
   countdown: "bg-red-100 text-red-700",
   video: "bg-indigo-100 text-indigo-700",
   pricing: "bg-emerald-100 text-emerald-700",
-  contact: "bg-slate-100 text-slate-700",
+  contact: "bg-slate-100 text-charcoal-light-700",
 };
 
 const TEMPLATE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -96,7 +98,7 @@ function slugify(text: string): string {
 function defaultContent(type: TemplatType): Record<string, unknown> {
   switch (type) {
     case "hero":
-      return { title: "", subtitle: "", description: "", cta_text: "", cta_link: "" };
+      return { headline: "", subtitle: "", description: "", button_text: "", button_url: "" };
     case "text_image_left":
     case "text_image_right":
       return { title: "", text: "", image_position: type === "text_image_left" ? "left" : "right", cta_text: "", cta_link: "" };
@@ -128,14 +130,14 @@ function defaultContent(type: TemplatType): Record<string, unknown> {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="space-y-1">
-      <label className="block text-sm font-medium text-charcoal dark:text-white">{label}</label>
+      <label className="block text-sm font-medium text-charcoal">{label}</label>
       {children}
     </div>
   );
 }
 
 const inputCls =
-  "w-full px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm";
+  "w-full px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm";
 const textareaCls = inputCls + " resize-none";
 
 function ContentFields({
@@ -168,12 +170,12 @@ function ContentFields({
   if (templateType === "hero") {
     return (
       <div className="space-y-4">
-        <Field label="Titel"><input className={inputCls} value={str("title")} onChange={e => set("title", e.target.value)} /></Field>
+        <Field label="Überschrift"><input className={inputCls} value={str("headline")} onChange={e => set("headline", e.target.value)} /></Field>
         <Field label="Untertitel"><input className={inputCls} value={str("subtitle")} onChange={e => set("subtitle", e.target.value)} /></Field>
         <Field label="Beschreibung"><textarea className={textareaCls} rows={3} value={str("description")} onChange={e => set("description", e.target.value)} /></Field>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Button-Text"><input className={inputCls} value={str("cta_text")} onChange={e => set("cta_text", e.target.value)} /></Field>
-          <Field label="Button-Link"><input className={inputCls} value={str("cta_link")} onChange={e => set("cta_link", e.target.value)} /></Field>
+          <Field label="Button-Text"><input className={inputCls} value={str("button_text")} onChange={e => set("button_text", e.target.value)} /></Field>
+          <Field label="Button-Link"><input className={inputCls} value={str("button_url")} onChange={e => set("button_url", e.target.value)} /></Field>
         </div>
       </div>
     );
@@ -200,16 +202,16 @@ function ContentFields({
         <Field label="Untertitel"><input className={inputCls} value={str("subtitle")} onChange={e => set("subtitle", e.target.value)} /></Field>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-charcoal dark:text-white">Features</p>
+            <p className="text-sm font-medium text-charcoal">Features</p>
             <button type="button" onClick={() => addItem("features", { icon: "", title: "", description: "" })} className="flex items-center gap-1 text-xs text-gold-dark hover:text-gold px-2 py-1 rounded hover:bg-gold/5">
               <Plus className="w-3 h-3" /> Hinzufügen
             </button>
           </div>
           {features.map((f, i) => (
-            <div key={i} className="p-3 bg-cream/50 dark:bg-charcoal rounded-lg space-y-2">
+            <div key={i} className="p-3 bg-gray-50/50 rounded-lg space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-xs text-slate">Feature {i + 1}</span>
-                <button type="button" onClick={() => removeItem("features", i)} className="text-slate hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
+                <span className="text-xs text-charcoal-light">Feature {i + 1}</span>
+                <button type="button" onClick={() => removeItem("features", i)} className="text-charcoal-light hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
               </div>
               <input className={inputCls} placeholder="Icon (z.B. Heart)" value={f.icon} onChange={e => updateItem("features", i, "icon", e.target.value)} />
               <input className={inputCls} placeholder="Titel" value={f.title} onChange={e => updateItem("features", i, "title", e.target.value)} />
@@ -228,16 +230,16 @@ function ContentFields({
         <Field label="Titel (optional)"><input className={inputCls} value={str("title")} onChange={e => set("title", e.target.value)} /></Field>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-charcoal dark:text-white">Testimonials</p>
+            <p className="text-sm font-medium text-charcoal">Testimonials</p>
             <button type="button" onClick={() => addItem("testimonials", { name: "", text: "", rating: 5, company: "" })} className="flex items-center gap-1 text-xs text-gold-dark hover:text-gold px-2 py-1 rounded hover:bg-gold/5">
               <Plus className="w-3 h-3" /> Hinzufügen
             </button>
           </div>
           {testimonials.map((t, i) => (
-            <div key={i} className="p-3 bg-cream/50 dark:bg-charcoal rounded-lg space-y-2">
+            <div key={i} className="p-3 bg-gray-50/50 rounded-lg space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-xs text-slate">Testimonial {i + 1}</span>
-                <button type="button" onClick={() => removeItem("testimonials", i)} className="text-slate hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
+                <span className="text-xs text-charcoal-light">Testimonial {i + 1}</span>
+                <button type="button" onClick={() => removeItem("testimonials", i)} className="text-charcoal-light hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <input className={inputCls} placeholder="Name" value={t.name} onChange={e => updateItem("testimonials", i, "name", e.target.value)} />
@@ -261,16 +263,16 @@ function ContentFields({
         <Field label="Titel (optional)"><input className={inputCls} value={str("title")} onChange={e => set("title", e.target.value)} /></Field>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-charcoal dark:text-white">FAQ-Einträge</p>
+            <p className="text-sm font-medium text-charcoal">FAQ-Einträge</p>
             <button type="button" onClick={() => addItem("items", { question: "", answer: "" })} className="flex items-center gap-1 text-xs text-gold-dark hover:text-gold px-2 py-1 rounded hover:bg-gold/5">
               <Plus className="w-3 h-3" /> Hinzufügen
             </button>
           </div>
           {items.map((item, i) => (
-            <div key={i} className="p-3 bg-cream/50 dark:bg-charcoal rounded-lg space-y-2">
+            <div key={i} className="p-3 bg-gray-50/50 rounded-lg space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-xs text-slate">Eintrag {i + 1}</span>
-                <button type="button" onClick={() => removeItem("items", i)} className="text-slate hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
+                <span className="text-xs text-charcoal-light">Eintrag {i + 1}</span>
+                <button type="button" onClick={() => removeItem("items", i)} className="text-charcoal-light hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
               </div>
               <input className={inputCls} placeholder="Frage" value={item.question} onChange={e => updateItem("items", i, "question", e.target.value)} />
               <textarea className={textareaCls} rows={2} placeholder="Antwort" value={item.answer} onChange={e => updateItem("items", i, "answer", e.target.value)} />
@@ -292,7 +294,7 @@ function ContentFields({
             <option value="4">4 Spalten</option>
           </select>
         </Field>
-        <p className="text-xs text-slate bg-gold/5 border border-gold/20 rounded-lg p-3">
+        <p className="text-xs text-charcoal-light bg-gold/5 border border-gray-200 rounded-lg p-3">
           Bilder werden nach dem Speichern separat über den Bild-Upload verwaltet.
         </p>
       </div>
@@ -306,16 +308,16 @@ function ContentFields({
         <Field label="Titel (optional)"><input className={inputCls} value={str("title")} onChange={e => set("title", e.target.value)} /></Field>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-charcoal dark:text-white">Ereignisse</p>
+            <p className="text-sm font-medium text-charcoal">Ereignisse</p>
             <button type="button" onClick={() => addItem("items", { year: "", title: "", description: "" })} className="flex items-center gap-1 text-xs text-gold-dark hover:text-gold px-2 py-1 rounded hover:bg-gold/5">
               <Plus className="w-3 h-3" /> Hinzufügen
             </button>
           </div>
           {items.map((item, i) => (
-            <div key={i} className="p-3 bg-cream/50 dark:bg-charcoal rounded-lg space-y-2">
+            <div key={i} className="p-3 bg-gray-50/50 rounded-lg space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-xs text-slate">Ereignis {i + 1}</span>
-                <button type="button" onClick={() => removeItem("items", i)} className="text-slate hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
+                <span className="text-xs text-charcoal-light">Ereignis {i + 1}</span>
+                <button type="button" onClick={() => removeItem("items", i)} className="text-charcoal-light hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <input className={inputCls} placeholder="Jahr / Datum" value={item.year} onChange={e => updateItem("items", i, "year", e.target.value)} />
@@ -361,21 +363,21 @@ function ContentFields({
         <Field label="Untertitel (optional)"><input className={inputCls} value={str("subtitle")} onChange={e => set("subtitle", e.target.value)} /></Field>
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-charcoal dark:text-white">Pläne</p>
+            <p className="text-sm font-medium text-charcoal">Pläne</p>
             <button type="button" onClick={() => addItem("plans", { name: "", price: "", features: [""], is_featured: false })} className="flex items-center gap-1 text-xs text-gold-dark hover:text-gold px-2 py-1 rounded hover:bg-gold/5">
               <Plus className="w-3 h-3" /> Hinzufügen
             </button>
           </div>
           {plans.map((plan, i) => (
-            <div key={i} className="p-3 bg-cream/50 dark:bg-charcoal rounded-lg space-y-2">
+            <div key={i} className="p-3 bg-gray-50/50 rounded-lg space-y-2">
               <div className="flex justify-between items-center">
-                <span className="text-xs text-slate">Plan {i + 1}</span>
+                <span className="text-xs text-charcoal-light">Plan {i + 1}</span>
                 <div className="flex items-center gap-2">
-                  <label className="flex items-center gap-1 text-xs text-slate cursor-pointer">
+                  <label className="flex items-center gap-1 text-xs text-charcoal-light cursor-pointer">
                     <input type="checkbox" checked={plan.is_featured} onChange={e => updateItem("plans", i, "is_featured", e.target.checked)} className="rounded" />
                     Empfohlen
                   </label>
-                  <button type="button" onClick={() => removeItem("plans", i)} className="text-slate hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
+                  <button type="button" onClick={() => removeItem("plans", i)} className="text-charcoal-light hover:text-red-500"><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
@@ -408,13 +410,155 @@ function ContentFields({
         </div>
         <label className="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" checked={(content["show_form"] as boolean) ?? true} onChange={e => set("show_form", e.target.checked)} className="rounded" />
-          <span className="text-sm text-charcoal dark:text-white">Kontaktformular anzeigen</span>
+          <span className="text-sm text-charcoal">Kontaktformular anzeigen</span>
         </label>
       </div>
     );
   }
 
   return null;
+}
+
+// ─── ImageManager ────────────────────────────────────────────────────────────
+
+const IMAGE_TEMPLATES: TemplatType[] = ["hero", "text_image_left", "text_image_right", "gallery"];
+
+function ImageManager({ sectionId, images, onRefresh }: {
+  sectionId: number;
+  images: import("@/types").SectionImage[];
+  onRefresh: () => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
+
+  async function handleUpload(file: File) {
+    setUploading(true);
+    const fd = new FormData();
+    fd.append("image", file);
+    fd.append("order", String(images.length));
+    try {
+      const res = await fetch(`/api/admin/sections/${sectionId}/images/`, {
+        method: "POST",
+        headers: { Authorization: `Token ${localStorage.getItem("admin_token")}` },
+        body: fd,
+      });
+      if (!res.ok) throw new Error();
+      onRefresh();
+    } catch {
+      toast.error("Bild-Upload fehlgeschlagen");
+    } finally {
+      setUploading(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  }
+
+  async function handleDelete(imageId: number) {
+    setDeletingId(imageId);
+    try {
+      const res = await fetch(`/api/admin/sections/${sectionId}/images/${imageId}/`, {
+        method: "DELETE",
+        headers: { Authorization: `Token ${localStorage.getItem("admin_token")}` },
+      });
+      if (!res.ok) throw new Error();
+      onRefresh();
+    } catch {
+      toast.error("Löschen fehlgeschlagen");
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
+  async function handlePickFromLibrary(media: { id: number; file_url: string; file: string; alt_text: string }) {
+    setPickerOpen(false);
+    setUploading(true);
+    try {
+      const res = await fetch(media.file_url);
+      const blob = await res.blob();
+      const fileName = media.file.split("/").pop() ?? "image";
+      const file = new File([blob], fileName, { type: blob.type });
+      const fd = new FormData();
+      fd.append("image", file);
+      fd.append("order", String(images.length));
+      fd.append("alt_text", media.alt_text ?? "");
+      const uploadRes = await fetch(`/api/admin/sections/${sectionId}/images/`, {
+        method: "POST",
+        headers: { Authorization: `Token ${localStorage.getItem("admin_token")}` },
+        body: fd,
+      });
+      if (!uploadRes.ok) throw new Error();
+      onRefresh();
+    } catch {
+      toast.error("Bild-Link fehlgeschlagen");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      {/* Existing images */}
+      {images.length > 0 && (
+        <div className="grid grid-cols-2 gap-2">
+          {images.map((img) => (
+            <div key={img.id} className="relative group rounded-lg overflow-hidden border border-gray-200">
+              <img
+                src={img.image_url ?? img.image}
+                alt={img.alt_text || ""}
+                className="w-full h-28 object-cover"
+              />
+              <button
+                type="button"
+                disabled={deletingId === img.id}
+                onClick={() => handleDelete(img.id)}
+                className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50"
+              >
+                {deletingId === img.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <X className="w-3 h-3" />}
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Action buttons */}
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          disabled={uploading}
+          onClick={() => inputRef.current?.click()}
+          className="flex items-center justify-center gap-2 px-3 py-2.5 border-2 border-dashed border-gray-200 rounded-lg text-sm text-charcoal-light hover:border-gold hover:text-gold-dark transition-colors disabled:opacity-50"
+        >
+          {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+          {uploading ? "Hochladen…" : "Hochladen"}
+        </button>
+        <button
+          type="button"
+          disabled={uploading}
+          onClick={() => setPickerOpen(true)}
+          className="flex items-center justify-center gap-2 px-3 py-2.5 border-2 border-dashed border-gray-200 rounded-lg text-sm text-charcoal-light hover:border-gold hover:text-gold-dark transition-colors disabled:opacity-50"
+        >
+          <Image className="w-4 h-4" />
+          Mediathek
+        </button>
+      </div>
+
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => e.target.files?.[0] && handleUpload(e.target.files[0])}
+      />
+
+      {pickerOpen && (
+        <MediaPickerModal
+          onSelect={handlePickFromLibrary}
+          onClose={() => setPickerOpen(false)}
+        />
+      )}
+    </div>
+  );
 }
 
 // ─── SectionModal ─────────────────────────────────────────────────────────────
@@ -437,6 +581,28 @@ function SectionModal({ section, onClose, onSuccess }: ModalProps) {
   const [order, setOrder] = useState(section?.order ?? 0);
   const [content, setContent] = useState<Record<string, unknown>>(section?.content ?? {});
   const [anchorManual, setAnchorManual] = useState(isEdit);
+  const [pageId, setPageId] = useState<number | null>(section?.page_id ?? null);
+  const [images, setImages] = useState<import("@/types").SectionImage[]>(section?.images ?? []);
+
+  async function refreshImages() {
+    if (!section?.id) return;
+    try {
+      const res = await fetch(`/api/admin/sections/${section.id}/`, {
+        headers: { Authorization: `Token ${localStorage.getItem("admin_token")}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setImages(data.images ?? []);
+      }
+    } catch { /* ignore */ }
+  }
+
+  // Load pages for dropdown
+  const { data: availablePages, isLoading: pagesLoading, error: pagesLoadError } = useQuery<Page[]>({
+    queryKey: ["admin", "pages"],
+    queryFn: getAdminPages,
+    retry: 1,
+  });
 
   const queryClient = useQueryClient();
 
@@ -471,6 +637,10 @@ function SectionModal({ section, onClose, onSuccess }: ModalProps) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!selectedTemplate) return;
+    if (!pageId) {
+      toast.error("Bitte wählen Sie eine Seite aus");
+      return;
+    }
     saveMutation.mutate({
       title,
       anchor,
@@ -478,22 +648,23 @@ function SectionModal({ section, onClose, onSuccess }: ModalProps) {
       content,
       order,
       is_active: isActive,
+      page_id: pageId,
     });
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-white dark:bg-charcoal-light rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gold/10">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center gap-3">
             {step === "content" && !isEdit && (
-              <button type="button" onClick={() => setStep("template")} className="text-slate hover:text-charcoal dark:hover:text-white">
+              <button type="button" onClick={() => setStep("template")} className="text-charcoal-light hover:text-charcoal">
                 <X className="w-4 h-4 rotate-180" />
               </button>
             )}
-            <h2 className="font-display text-xl text-charcoal dark:text-white">
+            <h2 className="font-display text-xl text-charcoal">
               {isEdit ? "Section bearbeiten" : step === "template" ? "Template wählen" : "Section konfigurieren"}
             </h2>
             {step === "content" && selectedTemplate && (
@@ -502,7 +673,7 @@ function SectionModal({ section, onClose, onSuccess }: ModalProps) {
               </span>
             )}
           </div>
-          <button type="button" onClick={onClose} className="text-slate hover:text-charcoal dark:hover:text-white p-1 rounded-lg hover:bg-gold/5">
+          <button type="button" onClick={onClose} className="text-charcoal-light hover:text-charcoal p-1 rounded-lg hover:bg-gold/5">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -511,7 +682,7 @@ function SectionModal({ section, onClose, onSuccess }: ModalProps) {
         <div className="overflow-y-auto flex-1 p-6">
           {step === "template" ? (
             <div>
-              <p className="text-sm text-slate mb-4">Wählen Sie das Layout für Ihre neue Section:</p>
+              <p className="text-sm text-charcoal-light mb-4">Wählen Sie das Layout für Ihre neue Section:</p>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {ALL_TEMPLATES.map((tpl) => {
                   const Icon = TEMPLATE_ICONS[tpl] ?? LayoutTemplate;
@@ -527,16 +698,16 @@ function SectionModal({ section, onClose, onSuccess }: ModalProps) {
                       className={`p-4 border-2 rounded-xl cursor-pointer text-left transition-colors ${
                         isSelected
                           ? "border-gold bg-gold/5"
-                          : "border-gold/20 dark:border-gold/10 hover:border-gold dark:hover:border-gold"
+                          : "border-gray-200 dark:border-gray-200 hover:border-gold dark:hover:border-gold"
                       }`}
                     >
                       <div className={`inline-flex p-2 rounded-lg mb-2 ${TEMPLATE_COLORS[tpl]}`}>
                         <Icon className="w-4 h-4" />
                       </div>
-                      <p className="text-sm font-medium text-charcoal dark:text-white leading-tight">
+                      <p className="text-sm font-medium text-charcoal leading-tight">
                         {TEMPLATE_LABELS[tpl]}
                       </p>
-                      <p className="text-xs text-slate mt-1 leading-tight">
+                      <p className="text-xs text-charcoal-light mt-1 leading-tight">
                         {TEMPLATE_DESCRIPTIONS[tpl]}
                       </p>
                     </button>
@@ -571,15 +742,41 @@ function SectionModal({ section, onClose, onSuccess }: ModalProps) {
                 </Field>
                 <label className="flex items-center gap-2 mt-5 cursor-pointer">
                   <input type="checkbox" checked={isActive} onChange={e => setIsActive(e.target.checked)} className="rounded" />
-                  <span className="text-sm text-charcoal dark:text-white">Aktiv</span>
+                  <span className="text-sm text-charcoal">Aktiv</span>
                 </label>
               </div>
 
-              <hr className="border-gold/10" />
+              {/* Page Selection */}
+              <div>
+                <label className="block text-sm font-medium text-charcoal mb-2">
+                  Seite *
+                </label>
+                <select
+                  required
+                  value={pageId ?? ""}
+                  onChange={(e) => setPageId(e.target.value ? Number(e.target.value) : null)}
+                  className={inputCls}
+                  disabled={pagesLoading}
+                >
+                  <option value="">
+                    {pagesLoading ? "Lade Seiten..." : pagesLoadError ? "Fehler beim Laden" : "Seite auswählen..."}
+                  </option>
+                  {Array.isArray(availablePages) && availablePages.map((page) => (
+                    <option key={page.id} value={page.id}>
+                      {page.title}
+                    </option>
+                  ))}
+                </select>
+                {pagesLoadError && (
+                  <p className="text-red-500 text-xs mt-1">Fehler: {pagesLoadError.message}</p>
+                )}
+              </div>
+
+              <hr className="border-gray-200" />
 
               {/* Template-specific */}
               <div>
-                <p className="text-sm font-medium text-charcoal dark:text-white mb-3">Inhalt</p>
+                <p className="text-sm font-medium text-charcoal mb-3">Inhalt</p>
                 {selectedTemplate && (
                   <ContentFields
                     templateType={selectedTemplate}
@@ -588,13 +785,26 @@ function SectionModal({ section, onClose, onSuccess }: ModalProps) {
                   />
                 )}
               </div>
+
+              {/* Image management – only for saved sections with image-supporting templates */}
+              {isEdit && section?.id && selectedTemplate && IMAGE_TEMPLATES.includes(selectedTemplate) && (
+                <div>
+                  <hr className="border-gray-200 mb-5" />
+                  <p className="text-sm font-medium text-charcoal mb-3">Bilder</p>
+                  <ImageManager
+                    sectionId={section.id}
+                    images={images}
+                    onRefresh={refreshImages}
+                  />
+                </div>
+              )}
             </form>
           )}
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-gold/10 flex justify-end gap-3">
-          <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-slate hover:text-charcoal dark:hover:text-white border border-gold/20 rounded-lg hover:bg-gold/5 transition-colors">
+        <div className="p-6 border-t border-gray-200 flex justify-end gap-3">
+          <button type="button" onClick={onClose} className="px-4 py-2 text-sm text-charcoal-light hover:text-charcoal border border-gray-200 rounded-lg hover:bg-gold/5 transition-colors">
             Abbrechen
           </button>
           {step === "template" ? (
@@ -642,7 +852,7 @@ function SectionCard({
   const Icon = TEMPLATE_ICONS[section.template_type] ?? LayoutTemplate;
 
   return (
-    <div className="bg-white dark:bg-charcoal-light rounded-xl p-5 shadow-elegant hover:shadow-lg transition-shadow">
+    <div className="bg-white rounded-xl p-5 shadow-elegant hover:shadow-lg transition-shadow">
       {/* Top row */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3 min-w-0">
@@ -650,17 +860,17 @@ function SectionCard({
             <Icon className="w-4 h-4" />
           </div>
           <div className="min-w-0">
-            <h3 className="font-serif text-base text-charcoal dark:text-white truncate">{section.title}</h3>
-            {section.anchor && <p className="text-xs text-slate truncate">#{section.anchor}</p>}
+            <h3 className="font-serif text-base text-charcoal truncate">{section.title}</h3>
+            {section.anchor && <p className="text-xs text-charcoal-light truncate">#{section.anchor}</p>}
           </div>
         </div>
         {/* Order controls */}
         <div className="flex items-center gap-1 shrink-0 ml-2">
-          <button type="button" onClick={() => onOrderChange(-1)} className="p-1 text-slate hover:text-charcoal dark:hover:text-white hover:bg-gold/5 rounded transition-colors">
+          <button type="button" onClick={() => onOrderChange(-1)} className="p-1 text-charcoal-light hover:text-charcoal hover:bg-gold/5 rounded transition-colors">
             <ChevronUp className="w-4 h-4" />
           </button>
-          <span className="text-xs text-slate w-5 text-center font-mono">{section.order}</span>
-          <button type="button" onClick={() => onOrderChange(1)} className="p-1 text-slate hover:text-charcoal dark:hover:text-white hover:bg-gold/5 rounded transition-colors">
+          <span className="text-xs text-charcoal-light w-5 text-center font-mono">{section.order}</span>
+          <button type="button" onClick={() => onOrderChange(1)} className="p-1 text-charcoal-light hover:text-charcoal hover:bg-gold/5 rounded transition-colors">
             <ChevronDown className="w-4 h-4" />
           </button>
         </div>
@@ -677,7 +887,7 @@ function SectionCard({
           className={`px-2 py-0.5 rounded-full text-xs font-medium transition-colors ${
             section.is_active
               ? "bg-green-100 text-green-700 hover:bg-green-200"
-              : "bg-slate/10 text-slate hover:bg-slate/20"
+              : "bg-slate/10 text-charcoal-light hover:bg-slate/20"
           }`}
         >
           {section.is_active ? "Aktiv" : "Inaktiv"}
@@ -685,7 +895,7 @@ function SectionCard({
       </div>
 
       {/* Actions */}
-      <div className="flex gap-2 pt-3 border-t border-gold/10">
+      <div className="flex gap-2 pt-3 border-t border-gray-200">
         {confirmDelete ? (
           <div className="flex items-center gap-2 flex-1">
             <span className="text-xs text-red-500 flex-1">Wirklich löschen?</span>
@@ -699,7 +909,7 @@ function SectionCard({
             <button
               type="button"
               onClick={() => setConfirmDelete(false)}
-              className="flex items-center gap-1 px-2 py-1.5 text-xs border border-gold/20 text-slate rounded-lg hover:bg-gold/5 transition-colors"
+              className="flex items-center gap-1 px-2 py-1.5 text-xs border border-gray-200 text-charcoal-light rounded-lg hover:bg-gold/5 transition-colors"
             >
               <X className="w-3 h-3" /> Nein
             </button>
@@ -709,7 +919,7 @@ function SectionCard({
             <button
               type="button"
               onClick={onEdit}
-              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm text-slate hover:text-gold-dark hover:bg-gold/5 rounded-lg transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm text-charcoal-light hover:text-gold-dark hover:bg-gold/5 rounded-lg transition-colors"
             >
               <Pencil className="w-4 h-4" />
               Bearbeiten
@@ -717,7 +927,7 @@ function SectionCard({
             <button
               type="button"
               onClick={() => setConfirmDelete(true)}
-              className="flex items-center justify-center px-3 py-2 text-slate hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+              className="flex items-center justify-center px-3 py-2 text-charcoal-light hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
             >
               <Trash2 className="w-4 h-4" />
             </button>
@@ -733,16 +943,48 @@ function SectionCard({
 export default function SectionsTab() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingSection, setEditingSection] = useState<CustomSection | null>(null);
+  const [selectedPageId, setSelectedPageId] = useState<number | null>(null);
   const queryClient = useQueryClient();
 
-  const { data: sections, isLoading } = useQuery<CustomSection[]>({
-    queryKey: ["admin", "sections"],
+  // Load pages for filter
+  const { data: pages, error: pagesError } = useQuery<Page[]>({
+    queryKey: ["admin", "pages"],
+    queryFn: getAdminPages,
+    retry: 1,
+  });
+
+  const { data: sections, isLoading, error: sectionsError } = useQuery<CustomSection[]>({
+    queryKey: ["admin", "sections", selectedPageId],
     queryFn: async () => {
-      const response = await fetch("/api/content/sections/");
+      const url = selectedPageId
+        ? `/api/admin/sections/list/?page=${selectedPageId}`
+        : "/api/admin/sections/list/";
+      const response = await fetch(url, {
+        headers: { Authorization: `Token ${localStorage.getItem("admin_token")}` },
+      });
       if (!response.ok) throw new Error("Failed to fetch sections");
       return response.json();
     },
+    retry: 1,
   });
+
+  // Handle errors gracefully
+  if (pagesError || sectionsError) {
+    return (
+      <div className="p-6 text-center">
+        <p className="text-red-500 mb-4">Fehler beim Laden der Daten</p>
+        <button 
+          onClick={() => {
+            queryClient.invalidateQueries({ queryKey: ["admin", "pages"] });
+            queryClient.invalidateQueries({ queryKey: ["admin", "sections"] });
+          }}
+          className="btn-elegant"
+        >
+          Erneut versuchen
+        </button>
+      </div>
+    );
+  }
 
   const toggleMutation = useMutation({
     mutationFn: async ({ id, is_active }: { id: number; is_active: boolean }) => {
@@ -795,20 +1037,35 @@ export default function SectionsTab() {
     );
   }
 
-  const sorted = [...(sections ?? [])].sort((a, b) => a.order - b.order);
+  const sorted = Array.isArray(sections) ? [...sections].sort((a, b) => a.order - b.order) : [];
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="font-display text-2xl text-charcoal dark:text-white">Custom Sections</h1>
-          <p className="text-slate mt-1">Verwalten Sie individuelle Seitenbereiche und deren Inhalte</p>
+          <h1 className="font-display text-2xl text-charcoal">Custom Sections</h1>
+          <p className="text-charcoal-light mt-1">Verwalten Sie individuelle Seitenbereiche und deren Inhalte</p>
         </div>
-        <button onClick={() => setModalOpen(true)} className="btn-elegant flex items-center gap-2">
-          <Plus className="w-5 h-5" />
-          Neue Section
-        </button>
+        <div className="flex items-center gap-3">
+          {/* Page Filter */}
+          <select
+            value={selectedPageId ?? ""}
+            onChange={(e) => setSelectedPageId(e.target.value ? Number(e.target.value) : null)}
+            className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white text-charcoal"
+          >
+            <option value="">Alle Seiten</option>
+            {Array.isArray(pages) ? pages.map((page) => (
+              <option key={page.id} value={page.id}>
+                {page.title}
+              </option>
+            )) : <option value="" disabled>Lade...</option>}
+          </select>
+          <button onClick={() => setModalOpen(true)} className="btn-elegant flex items-center gap-2">
+            <Plus className="w-5 h-5" />
+            Neue Section
+          </button>
+        </div>
       </div>
 
       {/* Grid */}
@@ -826,10 +1083,10 @@ export default function SectionsTab() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 bg-white dark:bg-charcoal-light rounded-xl shadow-elegant">
-          <Layers className="w-14 h-14 text-slate-light mx-auto mb-4" />
-          <p className="font-serif text-lg text-charcoal dark:text-white mb-1">Keine Sections vorhanden</p>
-          <p className="text-slate text-sm">Erstellen Sie Ihre erste Custom Section mit dem Button oben.</p>
+        <div className="text-center py-16 bg-white rounded-xl shadow-elegant">
+          <Layers className="w-14 h-14 text-charcoal-light-light mx-auto mb-4" />
+          <p className="font-serif text-lg text-charcoal mb-1">Keine Sections vorhanden</p>
+          <p className="text-charcoal-light text-sm">Erstellen Sie Ihre erste Custom Section mit dem Button oben.</p>
         </div>
       )}
 

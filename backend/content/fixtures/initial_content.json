@@ -1,122 +1,129 @@
 [
   {
-    "model": "content.sitecontent",
+    "model": "content.page",
     "pk": 1,
     "fields": {
-      "section": "hero",
-      "key": "title",
-      "content": "Unvergessliche Wünsche",
-      "content_en": "Unforgettable Wishes",
-      "order": 1,
-      "is_active": true
+      "title": "Startseite",
+      "slug": "home",
+      "template": "landing",
+      "meta_title": "bevorJA – Unvergessliche Hochzeitswünsche",
+      "meta_description": "Bewahren Sie die herzlichsten Grüße Ihrer Hochzeitsgäste in einer wunderschönen Audio- und Kartenbox.",
+      "is_published": true,
+      "published_at": "2026-01-01T00:00:00Z",
+      "show_in_nav": false,
+      "nav_order": 0,
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
     }
   },
   {
-    "model": "content.sitecontent",
+    "model": "content.customsection",
+    "pk": 1,
+    "fields": {
+      "page": 1,
+      "title": "Hero",
+      "anchor": "hero",
+      "template_type": "hero",
+      "content": {
+        "headline": "Unvergessliche Wünsche",
+        "subtitle": "für Ihren großen Tag",
+        "description": "Mit bevorJA bewahren Sie die herzlichsten Grüße und Wünsche Ihrer Hochzeitsgäste in einer wunderschönen Audio- und Kartenbox für die Ewigkeit auf.",
+        "button_text": "Jetzt entdecken",
+        "button_url": "/produkte"
+      },
+      "order": 1,
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.customsection",
     "pk": 2,
     "fields": {
-      "section": "hero",
-      "key": "subtitle",
-      "content": "für Ihren großen Tag",
-      "content_en": "for your special day",
+      "page": 1,
+      "title": "Warum bevorJA?",
+      "anchor": "features",
+      "template_type": "features_grid",
+      "content": {
+        "title": "Warum bevorJA?",
+        "subtitle": "",
+        "features": [
+          {
+            "icon": "Music",
+            "title": "Audio-Aufnahmen",
+            "description": "Gäste hinterlassen persönliche Sprachnachrichten, die Sie immer wieder anhören können."
+          },
+          {
+            "icon": "Gift",
+            "title": "Elegantes Design",
+            "description": "Hochwertige Verarbeitung mit wunderschönem Hochzeitsdesign, das perfekt zu Ihrem Fest passt."
+          },
+          {
+            "icon": "Heart",
+            "title": "Erinnerung für immer",
+            "description": "Bewahren Sie die schönsten Momente und Wünsche Ihrer Gäste für die Ewigkeit auf."
+          }
+        ]
+      },
       "order": 2,
-      "is_active": true
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z"
     }
   },
   {
-    "model": "content.sitecontent",
+    "model": "content.customsection",
     "pk": 3,
     "fields": {
-      "section": "hero",
-      "key": "description",
-      "content": "Mit Vorja bewahren Sie die herzlichsten Grüße und Wünsche Ihrer Hochzeitsgäste in einer wunderschönen Audio- und Kartenbox für die Ewigkeit auf.",
-      "content_en": "With Vorja, preserve the warmest greetings and wishes from your wedding guests in a beautiful audio and card box for eternity.",
+      "page": 1,
+      "title": "Unsere Geschichte",
+      "anchor": "unsere-geschichte",
+      "template_type": "text_image_right",
+      "content": {
+        "title": "Eine Box voller Erinnerungen",
+        "text": "Jede Hochzeit ist einzigartig – genau wie die Wünsche Ihrer Gäste. bevorJA vereint Audio-Nachrichten und handgeschriebene Karten in einer eleganten Box, die Sie ein Leben lang begleitet.",
+        "image_position": "right",
+        "cta_text": "Alle Produkte ansehen",
+        "cta_link": "/produkte"
+      },
       "order": 3,
-      "is_active": true
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z"
     }
   },
   {
-    "model": "content.sitecontent",
+    "model": "content.customsection",
     "pk": 4,
     "fields": {
-      "section": "hero",
-      "key": "button_text",
-      "content": "Jetzt entdecken",
-      "content_en": "Discover now",
+      "page": 1,
+      "title": "Kundenstimmen",
+      "anchor": "kundenstimmen",
+      "template_type": "testimonials",
+      "content": {
+        "title": "Was unsere Kunden sagen",
+        "testimonials": [
+          {
+            "name": "Anna & Markus",
+            "company": "",
+            "text": "Die bevorJA-Box hat unsere Hochzeit unvergesslich gemacht. Wir hören die Nachrichten unserer Gäste immer noch gerne an.",
+            "rating": 5
+          },
+          {
+            "name": "Sophie & Thomas",
+            "company": "",
+            "text": "Ein wunderschönes Geschenk, das uns täglich an unseren schönsten Tag erinnert. Absolute Kaufempfehlung!",
+            "rating": 5
+          },
+          {
+            "name": "Julia & Felix",
+            "company": "",
+            "text": "Unsere Gäste waren begeistert. So einfach zu bedienen und das Ergebnis ist einfach herzerwärmend.",
+            "rating": 5
+          }
+        ]
+      },
       "order": 4,
-      "is_active": true
-    }
-  },
-  {
-    "model": "content.sitecontent",
-    "pk": 5,
-    "fields": {
-      "section": "features",
-      "key": "section_title",
-      "content": "Warum Vorja?",
-      "content_en": "Why Vorja?",
-      "order": 1,
-      "is_active": true
-    }
-  },
-  {
-    "model": "content.sitecontent",
-    "pk": 6,
-    "fields": {
-      "section": "products",
-      "key": "section_title",
-      "content": "Unsere Boxen",
-      "content_en": "Our Boxes",
-      "order": 1,
-      "is_active": true
-    }
-  },
-  {
-    "model": "content.sitecontent",
-    "pk": 7,
-    "fields": {
-      "section": "products",
-      "key": "section_description",
-      "content": "Wählen Sie die perfekte Größe für Ihre Feier",
-      "content_en": "Choose the perfect size for your celebration",
-      "order": 2,
-      "is_active": true
-    }
-  },
-  {
-    "model": "content.sitecontent",
-    "pk": 8,
-    "fields": {
-      "section": "cta",
-      "key": "cta_title",
-      "content": "Bereit für unvergessliche Erinnerungen?",
-      "content_en": "Ready for unforgettable memories?",
-      "order": 1,
-      "is_active": true
-    }
-  },
-  {
-    "model": "content.sitecontent",
-    "pk": 9,
-    "fields": {
-      "section": "cta",
-      "key": "cta_description",
-      "content": "Bestellen Sie jetzt Ihre Vorja-Box und machen Sie Ihre Hochzeit noch unvergesslicher.",
-      "content_en": "Order your Vorja box now and make your wedding even more unforgettable.",
-      "order": 2,
-      "is_active": true
-    }
-  },
-  {
-    "model": "content.sitecontent",
-    "pk": 10,
-    "fields": {
-      "section": "cta",
-      "key": "cta_button",
-      "content": "Alle Produkte ansehen",
-      "content_en": "View all products",
-      "order": 3,
-      "is_active": true
+      "is_active": true,
+      "created_at": "2026-01-01T00:00:00Z"
     }
   },
   {

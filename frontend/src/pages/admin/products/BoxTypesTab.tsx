@@ -47,8 +47,8 @@ export default function BoxTypesTab() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-2xl text-charcoal dark:text-white">Box-Typen</h1>
-          <p className="text-slate mt-1">Verwalten Sie Box-Typen und deren Spezifikationen</p>
+          <h1 className="font-display text-2xl text-charcoal">Box-Typen</h1>
+          <p className="text-charcoal-light mt-1">Verwalten Sie Box-Typen und deren Spezifikationen</p>
         </div>
         <button
           onClick={() => setIsCreateModalOpen(true)}
@@ -71,9 +71,9 @@ export default function BoxTypesTab() {
       </div>
 
       {!boxTypes?.length && (
-        <div className="text-center py-12 bg-white dark:bg-charcoal-light rounded-xl">
-          <Box className="w-12 h-12 text-slate-light mx-auto mb-4" />
-          <p className="text-slate">Keine Box-Typen vorhanden</p>
+        <div className="text-center py-12 bg-white rounded-xl">
+          <Box className="w-12 h-12 text-charcoal-light-light mx-auto mb-4" />
+          <p className="text-charcoal-light">Keine Box-Typen vorhanden</p>
         </div>
       )}
 
@@ -119,21 +119,21 @@ function BoxTypeCard({
   };
 
   return (
-    <div className="bg-white dark:bg-charcoal-light rounded-xl p-5 shadow-elegant hover:shadow-lg transition-shadow">
+    <div className="bg-white rounded-xl p-5 shadow-elegant hover:shadow-lg transition-shadow">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center">
             <Package className="w-6 h-6 text-gold-dark" />
           </div>
           <div>
-            <h3 className="font-serif text-lg text-charcoal dark:text-white">{boxType.name}</h3>
+            <h3 className="font-serif text-lg text-charcoal">{boxType.name}</h3>
             <span className="inline-block px-2 py-1 bg-gold/10 text-gold-dark text-xs rounded-full font-medium">
               {boxType.box_type_display}
             </span>
           </div>
         </div>
         <span className={`px-2 py-1 rounded-full text-xs ${
-          boxType.is_active ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-slate-100 text-slate dark:bg-slate-700 dark:text-slate-300"
+          boxType.is_active ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-slate-100 text-charcoal-light dark:bg-slate-700 dark:text-charcoal-light-300"
         }`}>
           {boxType.is_active ? "Aktiv" : "Inaktiv"}
         </span>
@@ -141,16 +141,16 @@ function BoxTypeCard({
 
       <div className="space-y-2 mb-4">
         <div className="flex justify-between text-sm">
-          <span className="text-slate dark:text-slate-light">Basispreis:</span>
-          <span className="font-medium text-charcoal dark:text-white">€{boxType.base_price}</span>
+          <span className="text-charcoal-light dark:text-charcoal-light-light">Basispreis:</span>
+          <span className="font-medium text-charcoal">€{boxType.base_price}</span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-slate dark:text-slate-light">Gewicht:</span>
-          <span className="font-medium text-charcoal dark:text-white">{boxType.weight_grams}g</span>
+          <span className="text-charcoal-light dark:text-charcoal-light-light">Gewicht:</span>
+          <span className="font-medium text-charcoal">{boxType.weight_grams}g</span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-slate dark:text-slate-light">Maße:</span>
-          <span className="font-medium text-charcoal dark:text-white">
+          <span className="text-charcoal-light dark:text-charcoal-light-light">Maße:</span>
+          <span className="font-medium text-charcoal">
             {boxType.dimensions.length} × {boxType.dimensions.width} × {boxType.dimensions.height}mm
           </span>
         </div>
@@ -158,15 +158,15 @@ function BoxTypeCard({
 
       {boxType.features.length > 0 && (
         <div className="mb-4">
-          <p className="text-xs text-slate dark:text-slate-light mb-2">Features:</p>
+          <p className="text-xs text-charcoal-light dark:text-charcoal-light-light mb-2">Features:</p>
           <div className="flex flex-wrap gap-1">
             {boxType.features.slice(0, 3).map((feature, index) => (
-              <span key={index} className="text-xs px-2 py-1 bg-cream dark:bg-charcoal text-slate dark:text-slate-light rounded">
+              <span key={index} className="text-xs px-2 py-1 bg-gray-50 text-charcoal-light dark:text-charcoal-light-light rounded">
                 {feature}
               </span>
             ))}
             {boxType.features.length > 3 && (
-              <span className="text-xs px-2 py-1 bg-cream dark:bg-charcoal text-slate dark:text-slate-light rounded">
+              <span className="text-xs px-2 py-1 bg-gray-50 text-charcoal-light dark:text-charcoal-light-light rounded">
                 +{boxType.features.length - 3}
               </span>
             )}
@@ -175,10 +175,10 @@ function BoxTypeCard({
       )}
 
       {/* Actions */}
-      <div className="flex gap-2 pt-4 border-t border-gold/10 dark:border-gold/20">
+      <div className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-200">
         <button
           onClick={onEdit}
-          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm text-slate dark:text-slate-light hover:text-gold-dark hover:bg-gold/5 dark:hover:bg-gold/10 rounded-lg transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm text-charcoal-light dark:text-charcoal-light-light hover:text-gold-dark hover:bg-gold/5 dark:hover:bg-gold/10 rounded-lg transition-colors"
         >
           <Pencil className="w-4 h-4" />
           Bearbeiten
@@ -186,7 +186,7 @@ function BoxTypeCard({
         {!showDeleteConfirm ? (
           <button
             onClick={() => setShowDeleteConfirm(true)}
-            className="flex items-center justify-center px-3 py-2 text-slate dark:text-slate-light hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+            className="flex items-center justify-center px-3 py-2 text-charcoal-light dark:text-charcoal-light-light hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
           >
             <Trash2 className="w-4 h-4" />
           </button>
@@ -200,7 +200,7 @@ function BoxTypeCard({
             </button>
             <button
               onClick={() => setShowDeleteConfirm(false)}
-              className="flex items-center justify-center px-2 py-1 text-xs text-slate hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"
+              className="flex items-center justify-center px-2 py-1 text-xs text-charcoal-light hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"
             >
               <X className="w-3 h-3" />
             </button>
@@ -317,14 +317,14 @@ function BoxTypeModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-charcoal-light rounded-2xl shadow-elegant p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-elegant p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-display text-xl text-charcoal dark:text-white">
+          <h2 className="font-display text-xl text-charcoal">
             {boxType ? "Box-Typ bearbeiten" : "Neuer Box-Typ"}
           </h2>
           <button
             onClick={onClose}
-            className="text-slate hover:text-charcoal dark:hover:text-white transition-colors"
+            className="text-charcoal-light hover:text-charcoal transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -333,14 +333,14 @@ function BoxTypeModal({
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-1">
+            <label className="block text-sm font-medium text-charcoal-light dark:text-charcoal-light-light mb-1">
               Name *
             </label>
             <input
               type="text"
               value={formData.name || ""}
               onChange={(e) => handleNameChange(e.target.value)}
-              className="w-full px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
               required
             />
             {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
@@ -348,27 +348,27 @@ function BoxTypeModal({
 
           {/* Slug */}
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-1">
+            <label className="block text-sm font-medium text-charcoal-light dark:text-charcoal-light-light mb-1">
               Slug
             </label>
             <input
               type="text"
               value={formData.slug || ""}
               onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
-              className="w-full px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
             />
             {errors.slug && <p className="text-red-500 text-xs mt-1">{errors.slug}</p>}
           </div>
 
           {/* Box Type */}
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-1">
+            <label className="block text-sm font-medium text-charcoal-light dark:text-charcoal-light-light mb-1">
               Box-Typ *
             </label>
             <select
               value={formData.box_type || "audio"}
               onChange={(e) => setFormData(prev => ({ ...prev, box_type: e.target.value as 'audio' | 'wood' | 'hybrid' }))}
-              className="w-full px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
               required
             >
               <option value="audio">Audio Box</option>
@@ -380,17 +380,17 @@ function BoxTypeModal({
 
           {/* Base Price */}
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-1">
+            <label className="block text-sm font-medium text-charcoal-light dark:text-charcoal-light-light mb-1">
               Basispreis (€) *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate dark:text-slate-light">€</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-light dark:text-charcoal-light-light">€</span>
               <input
                 type="number"
                 step="0.01"
                 value={formData.base_price || ""}
                 onChange={(e) => setFormData(prev => ({ ...prev, base_price: e.target.value }))}
-                className="w-full pl-8 pr-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+                className="w-full pl-8 pr-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
                 required
               />
             </div>
@@ -399,7 +399,7 @@ function BoxTypeModal({
 
           {/* Weight */}
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-1">
+            <label className="block text-sm font-medium text-charcoal-light dark:text-charcoal-light-light mb-1">
               Gewicht (g)
             </label>
             <div className="relative">
@@ -407,16 +407,16 @@ function BoxTypeModal({
                 type="number"
                 value={formData.weight_grams || ""}
                 onChange={(e) => setFormData(prev => ({ ...prev, weight_grams: parseInt(e.target.value) || 0 }))}
-                className="w-full px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
               />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate dark:text-slate-light text-sm">g</span>
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-charcoal-light dark:text-charcoal-light-light text-sm">g</span>
             </div>
             {errors.weight_grams && <p className="text-red-500 text-xs mt-1">{errors.weight_grams}</p>}
           </div>
 
           {/* Dimensions */}
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-1">
+            <label className="block text-sm font-medium text-charcoal-light dark:text-charcoal-light-light mb-1">
               Dimensionen (mm)
             </label>
             <div className="flex items-center gap-2">
@@ -428,9 +428,9 @@ function BoxTypeModal({
                   ...prev,
                   dimensions: { ...prev.dimensions!, length: parseInt(e.target.value) || 0 }
                 }))}
-                className="flex-1 px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+                className="flex-1 px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
               />
-              <span className="text-slate dark:text-slate-light">×</span>
+              <span className="text-charcoal-light dark:text-charcoal-light-light">×</span>
               <input
                 type="number"
                 placeholder="B"
@@ -439,9 +439,9 @@ function BoxTypeModal({
                   ...prev,
                   dimensions: { ...prev.dimensions!, width: parseInt(e.target.value) || 0 }
                 }))}
-                className="flex-1 px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+                className="flex-1 px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
               />
-              <span className="text-slate dark:text-slate-light">×</span>
+              <span className="text-charcoal-light dark:text-charcoal-light-light">×</span>
               <input
                 type="number"
                 placeholder="H"
@@ -450,30 +450,30 @@ function BoxTypeModal({
                   ...prev,
                   dimensions: { ...prev.dimensions!, height: parseInt(e.target.value) || 0 }
                 }))}
-                className="flex-1 px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+                className="flex-1 px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
               />
-              <span className="text-slate dark:text-slate-light text-sm">mm</span>
+              <span className="text-charcoal-light dark:text-charcoal-light-light text-sm">mm</span>
             </div>
             {errors.dimensions && <p className="text-red-500 text-xs mt-1">{errors.dimensions}</p>}
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-1">
+            <label className="block text-sm font-medium text-charcoal-light dark:text-charcoal-light-light mb-1">
               Beschreibung
             </label>
             <textarea
               value={formData.description || ""}
               onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
               rows={3}
-              className="w-full px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm resize-none"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm resize-none"
             />
             {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
           </div>
 
           {/* Features */}
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-1">
+            <label className="block text-sm font-medium text-charcoal-light dark:text-charcoal-light-light mb-1">
               Features
             </label>
             <div className="space-y-2">
@@ -484,12 +484,12 @@ function BoxTypeModal({
                     value={feature}
                     onChange={(e) => updateFeature(index, e.target.value)}
                     placeholder="Feature eingeben"
-                    className="flex-1 px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+                    className="flex-1 px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
                   />
                   <button
                     type="button"
                     onClick={() => removeFeature(index)}
-                    className="p-2 text-slate hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                    className="p-2 text-charcoal-light hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -498,7 +498,7 @@ function BoxTypeModal({
               <button
                 type="button"
                 onClick={addFeature}
-                className="w-full py-2 border border-gold/20 dark:border-gold/10 rounded-lg text-slate dark:text-slate-light hover:bg-gold/5 dark:hover:bg-gold/10 transition-colors text-sm"
+                className="w-full py-2 border border-gray-200 dark:border-gray-200 rounded-lg text-charcoal-light dark:text-charcoal-light-light hover:bg-gold/5 dark:hover:bg-gold/10 transition-colors text-sm"
               >
                 + Feature hinzufügen
               </button>
@@ -513,9 +513,9 @@ function BoxTypeModal({
               id="is_active"
               checked={formData.is_active || false}
               onChange={(e) => setFormData(prev => ({ ...prev, is_active: e.target.checked }))}
-              className="w-4 h-4 text-gold border-gold/20 rounded focus:ring-gold/50"
+              className="w-4 h-4 text-gold border-gray-200 rounded focus:ring-gold/50"
             />
-            <label htmlFor="is_active" className="text-sm text-slate dark:text-slate-light">
+            <label htmlFor="is_active" className="text-sm text-charcoal-light dark:text-charcoal-light-light">
               Aktiv
             </label>
           </div>
@@ -525,7 +525,7 @@ function BoxTypeModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gold/20 rounded-lg text-slate dark:text-slate-light hover:bg-cream dark:hover:bg-charcoal transition-colors text-sm"
+              className="flex-1 px-4 py-2 border border-gray-200 rounded-lg text-charcoal-light dark:text-charcoal-light-light hover:bg-gray-50 transition-colors text-sm"
             >
               Abbrechen
             </button>

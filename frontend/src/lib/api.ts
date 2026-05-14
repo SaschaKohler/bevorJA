@@ -6,6 +6,7 @@ import type {
   OrderLookupData,
   ProductImage,
   CustomSection,
+  Page,
   // NEW: Flexible Framework
   Occasion,
   OccasionDetail,
@@ -17,7 +18,6 @@ import type {
   ConfiguratorData,
   // Admin extended types
   AdminOccasion,
-  AdminSiteContent,
   AdminCustomer,
   AdminCustomerDetail,
   AdminMedia,
@@ -100,18 +100,6 @@ export async function getStripeConfig(): Promise<StripeConfig> {
 // CMS Content API
 export async function getHomeContent(): Promise<HomeContent> {
   return fetchApi<HomeContent>("/api/content/home/");
-}
-
-interface SiteContentItem {
-  content: string;
-  content_en?: string;
-}
-
-export async function updateContent(id: number, data: Partial<SiteContentItem>): Promise<SiteContentItem> {
-  return fetchApi<SiteContentItem>(`/api/admin/content/${id}/`, {
-    method: "PATCH",
-    body: JSON.stringify(data),
-  });
 }
 
 // Order Lookup API
@@ -348,7 +336,7 @@ async function adminFetch<T>(url: string, options?: RequestInit): Promise<T> {
   if (!response.ok) {
     if (response.status === 401) {
       localStorage.removeItem("admin_token");
-      window.location.href = "/admin/login";
+      window.location.href = "/";
     }
     const error = await response.json().catch(() => ({}));
     throw new Error(error.error || `HTTP ${response.status}`);
@@ -522,11 +510,21 @@ export async function updateOrderStatus(
 }
 
 // ---------------------------------------------------------------------------
+// Admin Pages
+// ---------------------------------------------------------------------------
+
+export async function getAdminPages(): Promise<Page[]> {
+  const response = await adminFetch<{ results: Page[]; count: number }>("/api/admin/pages/");
+  return response.results;
+}
+
+// ---------------------------------------------------------------------------
 // Admin Sections
 // ---------------------------------------------------------------------------
 
-export async function getAdminSections(): Promise<CustomSection[]> {
-  return adminFetch<CustomSection[]>("/api/admin/sections/");
+export async function getAdminSections(pageId?: number): Promise<CustomSection[]> {
+  const url = pageId ? `/api/admin/sections/list/?page=${pageId}` : "/api/admin/sections/list/";
+  return adminFetch<CustomSection[]>(url);
 }
 
 export async function adminCreateSection(
@@ -550,25 +548,6 @@ export async function adminUpdateSection(
 
 export async function adminDeleteSection(id: number): Promise<void> {
   await adminFetch<unknown>(`/api/admin/sections/${id}/`, { method: "DELETE" });
-}
-
-// ---------------------------------------------------------------------------
-// Admin SiteContent
-// ---------------------------------------------------------------------------
-
-export async function getAdminSiteContent(): Promise<AdminSiteContent[]> {
-  const data = await adminFetch<PaginatedResponse<AdminSiteContent>>("/api/admin/site-content/");
-  return data.results;
-}
-
-export async function updateSiteContent(
-  id: number,
-  data: { content?: string; content_en?: string }
-): Promise<AdminSiteContent> {
-  return adminFetch<AdminSiteContent>(`/api/admin/site-content/${id}/`, {
-    method: "PATCH",
-    body: JSON.stringify(data),
-  });
 }
 
 // ---------------------------------------------------------------------------
@@ -635,7 +614,7 @@ export async function uploadAdminMedia(formData: FormData): Promise<AdminMedia> 
   if (!response.ok) {
     if (response.status === 401) {
       localStorage.removeItem("admin_token");
-      window.location.href = "/admin/login";
+      window.location.href = "/";
     }
     const error = await response.json().catch(() => ({}));
     throw new Error(error.error || `HTTP ${response.status}`);

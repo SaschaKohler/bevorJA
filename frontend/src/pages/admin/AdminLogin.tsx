@@ -29,25 +29,25 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-cream dark:bg-charcoal flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-charcoal-light rounded-2xl shadow-elegant p-8 w-full max-w-md">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-gradient-to-br from-gold to-gold-dark rounded-full flex items-center justify-center mx-auto mb-4">
             <LayoutDashboard className="w-8 h-8 text-white" />
           </div>
-          <h1 className="font-display text-2xl text-charcoal dark:text-white">Admin Login</h1>
-          <p className="text-slate mt-2">Vorja Content Management</p>
+          <h1 className="font-display text-3xl text-charcoal">Admin Login</h1>
+          <p className="text-charcoal-light mt-2">Vorja Content Management</p>
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm">
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-2">
+            <label className="block text-sm font-semibold text-charcoal mb-2">
               Passwort
             </label>
             <input
@@ -55,7 +55,7 @@ export default function AdminLogin() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Passwort eingeben"
-              className="w-full px-4 py-3 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gray-200 bg-gray-50 text-charcoal placeholder:text-charcoal-light/50 transition-all"
               required
             />
           </div>

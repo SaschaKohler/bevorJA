@@ -47,9 +47,9 @@ const authHeader = () => ({
 // ─── Shared Input Styles ───────────────────────────────────────────────────────
 
 const inputClass =
-  "w-full px-4 py-2.5 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white";
+  "w-full px-4 py-2.5 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal";
 
-const labelClass = "block text-sm font-medium text-slate mb-1.5";
+const labelClass = "block text-sm font-medium text-charcoal-light mb-1.5";
 
 // ─── Field with prefix/suffix ─────────────────────────────────────────────────
 
@@ -62,7 +62,7 @@ function Adornment({
 }) {
   return (
     <span
-      className={`px-3 py-2.5 text-sm text-slate bg-cream dark:bg-charcoal-light border-gold/20 dark:border-gold/10 select-none ${
+      className={`px-3 py-2.5 text-sm text-charcoal-light bg-gray-50-light border-gray-200 dark:border-gray-200 select-none ${
         position === "prefix"
           ? "border-r rounded-l-lg border border-y border-l"
           : "border-l rounded-r-lg border border-y border-r"
@@ -79,11 +79,11 @@ function AdornedInput({
   ...props
 }: React.InputHTMLAttributes<HTMLInputElement> & { prefix?: string; suffix?: string }) {
   return (
-    <div className="flex items-stretch border border-gold/20 dark:border-gold/10 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-gold/50">
+    <div className="flex items-stretch border border-gray-200 dark:border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-gold/50">
       {prefix && <Adornment adornment={prefix} position="prefix" />}
       <input
         {...props}
-        className="flex-1 px-4 py-2.5 bg-white dark:bg-charcoal text-charcoal dark:text-white focus:outline-none text-sm"
+        className="flex-1 px-4 py-2.5 bg-white text-charcoal focus:outline-none text-sm"
       />
       {suffix && <Adornment adornment={suffix} position="suffix" />}
     </div>
@@ -174,7 +174,7 @@ function SeoSection({
       <div>
         <div className="flex items-center justify-between mb-1.5">
           <label className={labelClass.replace("mb-1.5", "")}>Standard Meta-Titel</label>
-          <span className={`text-xs ${data.meta_title.length > 60 ? "text-rose-gold" : "text-slate"}`}>
+          <span className={`text-xs ${data.meta_title.length > 60 ? "text-rose-gold" : "text-charcoal-light"}`}>
             {data.meta_title.length}/70
           </span>
         </div>
@@ -190,7 +190,7 @@ function SeoSection({
       <div>
         <div className="flex items-center justify-between mb-1.5">
           <label className={labelClass.replace("mb-1.5", "")}>Standard Meta-Beschreibung</label>
-          <span className={`text-xs ${data.meta_description.length > 140 ? "text-rose-gold" : "text-slate"}`}>
+          <span className={`text-xs ${data.meta_description.length > 140 ? "text-rose-gold" : "text-charcoal-light"}`}>
             {data.meta_description.length}/160
           </span>
         </div>
@@ -205,7 +205,7 @@ function SeoSection({
       </div>
       <div>
         <label className={labelClass}>Analytics-Code</label>
-        <p className="text-xs text-slate mb-2">z.B. Google Analytics Tracking-Code (gtag.js)</p>
+        <p className="text-xs text-charcoal-light mb-2">z.B. Google Analytics Tracking-Code (gtag.js)</p>
         <textarea
           value={data.analytics_code}
           onChange={(e) => onChange({ ...data, analytics_code: e.target.value })}
@@ -310,12 +310,12 @@ export default function SettingsTab() {
     <div className="space-y-6 max-w-2xl">
       {/* Header */}
       <div>
-        <h1 className="font-display text-2xl text-charcoal dark:text-white">Einstellungen</h1>
-        <p className="text-slate mt-1">Shop, SEO und Email-Konfiguration</p>
+        <h1 className="font-display text-2xl text-charcoal">Einstellungen</h1>
+        <p className="text-charcoal-light mt-1">Shop, SEO und Email-Konfiguration</p>
       </div>
 
       {/* Tab Bar */}
-      <div className="flex border-b border-gold/10 mb-6 gap-1">
+      <div className="flex border-b border-gray-200 mb-6 gap-1">
         {TABS.map(({ key, label, Icon }) => (
           <button
             key={key}
@@ -323,7 +323,7 @@ export default function SettingsTab() {
             className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors -mb-px ${
               activeTab === key
                 ? "border-b-2 border-gold text-gold-dark"
-                : "text-slate hover:text-charcoal dark:hover:text-white border-b-2 border-transparent"
+                : "text-charcoal-light hover:text-charcoal border-b-2 border-transparent"
             }`}
           >
             <Icon className="w-4 h-4" />
@@ -333,7 +333,7 @@ export default function SettingsTab() {
       </div>
 
       {/* Section Card */}
-      <div className="bg-white dark:bg-charcoal-light rounded-xl p-6 shadow-elegant">
+      <div className="bg-white rounded-xl p-6 shadow-elegant">
         {activeTab === "shop" && (
           <ShopSection
             data={settings.shop}
@@ -354,7 +354,7 @@ export default function SettingsTab() {
         )}
 
         {/* Save Button */}
-        <div className="mt-8 pt-5 border-t border-gold/10 flex justify-end">
+        <div className="mt-8 pt-5 border-t border-gray-200 flex justify-end">
           <button
             onClick={() => saveMutation.mutate(activeTab)}
             disabled={saveMutation.isPending}

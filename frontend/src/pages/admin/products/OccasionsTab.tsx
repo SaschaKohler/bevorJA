@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Pencil, Trash2, Gift, Search, X, Check, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Gift, Heart, Music, Star, Crown, Gem, Sparkles, PartyPopper, Calendar, Camera, Flower2, Palmtree, Sun, Moon, Cloud, Home, Baby, Users, Diamond, Church, GlassWater, Cake, Plane, Briefcase, Search, X, Check, Loader2, type LucideProps } from "lucide-react";
+import type { ComponentType } from "react";
 import { HexColorPicker } from "react-colorful";
 import toast from "react-hot-toast";
 import type { Occasion } from "@/types";
@@ -14,8 +15,19 @@ interface AdminOccasion extends Occasion {
 const LUCIDE_ICONS = [
   "Gift", "Heart", "Music", "Star", "Crown", "Gem", "Sparkles", "PartyPopper",
   "Calendar", "Camera", "Flower2", "Palmtree", "Sun", "Moon", "Cloud", "Home",
-  "Baby", "Users", "Ring", "Church", "GlassWater", "Cake", "Plane", "Briefcase",
+  "Baby", "Users", "Diamond", "Church", "GlassWater", "Cake", "Plane", "Briefcase",
 ];
+
+const ICON_MAP: Record<string, ComponentType<LucideProps>> = {
+  Gift, Heart, Music, Star, Crown, Gem, Sparkles, PartyPopper,
+  Calendar, Camera, Flower2, Palmtree, Sun, Moon, Cloud, Home,
+  Baby, Users, Diamond, Church, GlassWater, Cake, Plane, Briefcase,
+};
+
+function DynamicIcon({ name, ...props }: { name?: string } & LucideProps) {
+  const Icon = (name && ICON_MAP[name]) ? ICON_MAP[name] : Gift;
+  return <Icon {...props} />;
+}
 
 export default function OccasionsTab() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,8 +79,8 @@ export default function OccasionsTab() {
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="font-display text-2xl text-charcoal dark:text-white">Anlässe</h1>
-          <p className="text-slate mt-1">Verwalten Sie Anlässe und deren Design-Einstellungen</p>
+          <h1 className="font-display text-2xl text-charcoal">Anlässe</h1>
+          <p className="text-charcoal-light mt-1">Verwalten Sie Anlässe und deren Design-Einstellungen</p>
         </div>
         <button
           onClick={() => setIsCreateModalOpen(true)}
@@ -81,13 +93,13 @@ export default function OccasionsTab() {
 
       {/* Search */}
       <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-charcoal-light" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Anlässe durchsuchen..."
-          className="w-full pl-10 pr-4 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white"
+          className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal"
         />
       </div>
 
@@ -108,9 +120,9 @@ export default function OccasionsTab() {
       </div>
 
       {filteredOccasions?.length === 0 && (
-        <div className="text-center py-12 bg-white dark:bg-charcoal-light rounded-xl">
-          <Gift className="w-12 h-12 text-slate-light mx-auto mb-4" />
-          <p className="text-slate">Keine Anlässe gefunden</p>
+        <div className="text-center py-12 bg-white rounded-xl">
+          <Gift className="w-12 h-12 text-charcoal-light-light mx-auto mb-4" />
+          <p className="text-charcoal-light">Keine Anlässe gefunden</p>
         </div>
       )}
 
@@ -149,18 +161,18 @@ function OccasionCard({
   onDelete: () => void;
 }) {
   return (
-    <div className="bg-white dark:bg-charcoal-light rounded-xl p-5 shadow-elegant hover:shadow-lg transition-shadow">
+    <div className="bg-white rounded-xl p-5 shadow-elegant hover:shadow-lg transition-shadow">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <div
             className="w-12 h-12 rounded-lg flex items-center justify-center"
             style={{ backgroundColor: occasion.color_primary }}
           >
-            <Gift className="w-6 h-6 text-white" />
+            <DynamicIcon name={occasion.icon} className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-serif text-lg text-charcoal dark:text-white">{occasion.name}</h3>
-            <p className="text-sm text-slate">/{occasion.slug}</p>
+            <h3 className="font-serif text-lg text-charcoal">{occasion.name}</h3>
+            <p className="text-sm text-charcoal-light">/{occasion.slug}</p>
           </div>
         </div>
         <div className="flex gap-1">
@@ -170,26 +182,26 @@ function OccasionCard({
             </span>
           )}
           {!occasion.is_active && (
-            <span className="px-2 py-1 bg-slate/10 text-slate text-xs rounded-full font-medium">
+            <span className="px-2 py-1 bg-slate/10 text-charcoal-light text-xs rounded-full font-medium">
               Inaktiv
             </span>
           )}
         </div>
       </div>
 
-      <p className="text-sm text-slate mb-4 line-clamp-2">{occasion.description || "Keine Beschreibung"}</p>
+      <p className="text-sm text-charcoal-light mb-4 line-clamp-2">{occasion.description || "Keine Beschreibung"}</p>
 
       {/* Colors Preview */}
       <div className="flex items-center gap-4 mb-4">
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate">Primär</span>
+          <span className="text-xs text-charcoal-light">Primär</span>
           <div
             className="w-6 h-6 rounded-full border-2 border-white dark:border-charcoal shadow-sm"
             style={{ backgroundColor: occasion.color_primary }}
           />
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate">Sekundär</span>
+          <span className="text-xs text-charcoal-light">Sekundär</span>
           <div
             className="w-6 h-6 rounded-full border-2 border-white dark:border-charcoal shadow-sm"
             style={{ backgroundColor: occasion.color_secondary }}
@@ -198,17 +210,17 @@ function OccasionCard({
       </div>
 
       {/* Actions */}
-      <div className="flex gap-2 pt-4 border-t border-gold/10">
+      <div className="flex gap-2 pt-4 border-t border-gray-200">
         <button
           onClick={onEdit}
-          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm text-slate hover:text-gold-dark hover:bg-gold/5 rounded-lg transition-colors"
+          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm text-charcoal-light hover:text-gold-dark hover:bg-gold/5 rounded-lg transition-colors"
         >
           <Pencil className="w-4 h-4" />
           Bearbeiten
         </button>
         <button
           onClick={onDelete}
-          className="flex items-center justify-center px-3 py-2 text-slate hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+          className="flex items-center justify-center px-3 py-2 text-charcoal-light hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
         >
           <Trash2 className="w-4 h-4" />
         </button>
@@ -280,12 +292,12 @@ function OccasionModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-charcoal-light rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-display text-xl text-charcoal dark:text-white">
+          <h2 className="font-display text-xl text-charcoal">
             {occasion ? "Anlass bearbeiten" : "Neuer Anlass"}
           </h2>
-          <button onClick={onClose} className="text-slate hover:text-charcoal dark:hover:text-white">
+          <button onClick={onClose} className="text-charcoal-light hover:text-charcoal">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -294,7 +306,7 @@ function OccasionModal({
           {/* Name & Slug */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate mb-2">Name *</label>
+              <label className="block text-sm font-medium text-charcoal-light mb-2">Name *</label>
               <input
                 type="text"
                 value={formData.name}
@@ -306,17 +318,17 @@ function OccasionModal({
                     slug: occasion ? prev.slug : generateSlug(name),
                   }));
                 }}
-                className="w-full px-4 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white"
+                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate mb-2">Slug *</label>
+              <label className="block text-sm font-medium text-charcoal-light mb-2">Slug *</label>
               <input
                 type="text"
                 value={formData.slug}
                 onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
-                className="w-full px-4 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white font-mono text-sm"
+                className="w-full px-4 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal font-mono text-sm"
                 required
               />
             </div>
@@ -324,32 +336,31 @@ function OccasionModal({
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-slate mb-2">Beschreibung</label>
+            <label className="block text-sm font-medium text-charcoal-light mb-2">Beschreibung</label>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
               rows={3}
-              className="w-full px-4 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white"
+              className="w-full px-4 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal"
             />
           </div>
 
           {/* Icon Selection */}
           <div>
-            <label className="block text-sm font-medium text-slate mb-2">Icon</label>
-            <div className="grid grid-cols-8 gap-2 p-3 border border-gold/20 dark:border-gold/10 rounded-lg max-h-32 overflow-y-auto">
+            <label className="block text-sm font-medium text-charcoal-light mb-2">Icon</label>
+            <div className="grid grid-cols-8 gap-2 p-3 border border-gray-200 dark:border-gray-200 rounded-lg max-h-32 overflow-y-auto">
               {LUCIDE_ICONS.map((icon) => (
                 <button
                   key={icon}
                   type="button"
                   onClick={() => setFormData((prev) => ({ ...prev, icon }))}
-                  className={`p-2 rounded-lg transition-colors ${
-                    formData.icon === icon
-                      ? "bg-gold text-white"
-                      : "hover:bg-gold/10 text-slate"
-                  }`}
+                  className={`p-2 rounded-lg transition-colors ${formData.icon === icon
+                    ? "bg-gold text-white"
+                    : "hover:bg-gold/10 text-charcoal-light"
+                    }`}
                   title={icon}
                 >
-                  <Gift className="w-5 h-5" />
+                  <DynamicIcon name={icon} className="w-5 h-5" />
                 </button>
               ))}
             </div>
@@ -358,10 +369,10 @@ function OccasionModal({
           {/* Colors */}
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-slate mb-2">Primärfarbe</label>
+              <label className="block text-sm font-medium text-charcoal-light mb-2">Primärfarbe</label>
               <div className="flex gap-3">
                 <div
-                  className="w-12 h-12 rounded-lg border-2 border-gold/20 cursor-pointer"
+                  className="w-12 h-12 rounded-lg border-2 border-gray-200 cursor-pointer"
                   style={{ backgroundColor: formData.color_primary }}
                   onClick={() => setActiveColorPicker(activeColorPicker === "primary" ? null : "primary")}
                 />
@@ -369,7 +380,7 @@ function OccasionModal({
                   type="text"
                   value={formData.color_primary}
                   onChange={(e) => setFormData((prev) => ({ ...prev, color_primary: e.target.value }))}
-                  className="flex-1 px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg font-mono text-sm"
+                  className="flex-1 px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg font-mono text-sm"
                 />
               </div>
               {activeColorPicker === "primary" && (
@@ -383,10 +394,10 @@ function OccasionModal({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate mb-2">Sekundärfarbe</label>
+              <label className="block text-sm font-medium text-charcoal-light mb-2">Sekundärfarbe</label>
               <div className="flex gap-3">
                 <div
-                  className="w-12 h-12 rounded-lg border-2 border-gold/20 cursor-pointer"
+                  className="w-12 h-12 rounded-lg border-2 border-gray-200 cursor-pointer"
                   style={{ backgroundColor: formData.color_secondary }}
                   onClick={() => setActiveColorPicker(activeColorPicker === "secondary" ? null : "secondary")}
                 />
@@ -394,7 +405,7 @@ function OccasionModal({
                   type="text"
                   value={formData.color_secondary}
                   onChange={(e) => setFormData((prev) => ({ ...prev, color_secondary: e.target.value }))}
-                  className="flex-1 px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg font-mono text-sm"
+                  className="flex-1 px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg font-mono text-sm"
                 />
               </div>
               {activeColorPicker === "secondary" && (
@@ -415,27 +426,27 @@ function OccasionModal({
                 type="checkbox"
                 checked={formData.is_active}
                 onChange={(e) => setFormData((prev) => ({ ...prev, is_active: e.target.checked }))}
-                className="w-4 h-4 text-gold rounded border-gold/20 focus:ring-gold"
+                className="w-4 h-4 text-gold rounded border-gray-200 focus:ring-gold"
               />
-              <span className="text-sm text-slate">Aktiv</span>
+              <span className="text-sm text-charcoal-light">Aktiv</span>
             </label>
             <label className="flex items-center gap-2">
               <input
                 type="checkbox"
                 checked={formData.is_default}
                 onChange={(e) => setFormData((prev) => ({ ...prev, is_default: e.target.checked }))}
-                className="w-4 h-4 text-gold rounded border-gold/20 focus:ring-gold"
+                className="w-4 h-4 text-gold rounded border-gray-200 focus:ring-gold"
               />
-              <span className="text-sm text-slate">Standard-Anlass</span>
+              <span className="text-sm text-charcoal-light">Standard-Anlass</span>
             </label>
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3 pt-4 border-t border-gold/10">
+          <div className="flex gap-3 pt-4 border-t border-gray-200">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gold/20 dark:border-gold/10 text-slate rounded-lg hover:bg-cream dark:hover:bg-charcoal transition-colors"
+              className="flex-1 px-4 py-2 border border-gray-200 dark:border-gray-200 text-charcoal-light rounded-lg hover:bg-gray-50 transition-colors"
             >
               Abbrechen
             </button>

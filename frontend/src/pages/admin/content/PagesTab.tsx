@@ -37,7 +37,7 @@ const TEMPLATE_LABELS: Record<Page["template"], string> = {
 };
 
 const TEMPLATE_COLORS: Record<Page["template"], string> = {
-  default: "bg-slate/10 text-slate",
+  default: "bg-slate/10 text-charcoal-light",
   landing: "bg-gold/10 text-gold-dark",
   shop: "bg-rose-gold/10 text-rose-gold",
 };
@@ -132,15 +132,15 @@ function PageModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-charcoal-light rounded-2xl p-6 max-w-xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl p-6 max-w-xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-display text-xl text-charcoal dark:text-white">
+          <h2 className="font-display text-xl text-charcoal">
             {page ? "Seite bearbeiten" : "Neue Seite"}
           </h2>
           <button
             onClick={onClose}
-            className="text-slate hover:text-charcoal dark:hover:text-white transition-colors"
+            className="text-charcoal-light hover:text-charcoal transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -149,7 +149,7 @@ function PageModal({
         <div className="space-y-4">
           {/* Titel */}
           <div>
-            <label className="block text-sm font-medium text-slate mb-1.5">
+            <label className="block text-sm font-medium text-charcoal-light mb-1.5">
               Titel <span className="text-rose-gold">*</span>
             </label>
             <input
@@ -157,15 +157,15 @@ function PageModal({
               value={form.title}
               onChange={(e) => handleTitleChange(e.target.value)}
               placeholder="Seitentitel"
-              className="w-full px-4 py-2.5 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal"
             />
           </div>
 
           {/* Slug */}
           <div>
-            <label className="block text-sm font-medium text-slate mb-1.5">Slug</label>
-            <div className="flex items-center border border-gold/20 dark:border-gold/10 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-gold/50 bg-white dark:bg-charcoal">
-              <span className="px-3 text-slate text-sm bg-cream dark:bg-charcoal-light border-r border-gold/20 dark:border-gold/10 py-2.5 select-none">
+            <label className="block text-sm font-medium text-charcoal-light mb-1.5">Slug</label>
+            <div className="flex items-center border border-gray-200 dark:border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-gold/50 bg-white">
+              <span className="px-3 text-charcoal-light text-sm bg-gray-50-light border-r border-gray-200 dark:border-gray-200 py-2.5 select-none">
                 /
               </span>
               <input
@@ -173,18 +173,18 @@ function PageModal({
                 value={form.slug}
                 onChange={(e) => handleSlugChange(e.target.value)}
                 placeholder="seiten-slug"
-                className="flex-1 px-3 py-2.5 font-mono text-sm bg-transparent focus:outline-none text-charcoal dark:text-white"
+                className="flex-1 px-3 py-2.5 font-mono text-sm bg-transparent focus:outline-none text-charcoal"
               />
             </div>
           </div>
 
           {/* Template */}
           <div>
-            <label className="block text-sm font-medium text-slate mb-1.5">Template</label>
+            <label className="block text-sm font-medium text-charcoal-light mb-1.5">Template</label>
             <select
               value={form.template}
               onChange={(e) => setForm((f) => ({ ...f, template: e.target.value as Page["template"] }))}
-              className="w-full px-4 py-2.5 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white"
+              className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal"
             >
               <option value="default">Standard</option>
               <option value="landing">Landingpage</option>
@@ -193,22 +193,22 @@ function PageModal({
           </div>
 
           {/* SEO Panel */}
-          <div className="border border-gold/10 rounded-lg overflow-hidden">
+          <div className="border border-gray-200 rounded-lg overflow-hidden">
             <button
               type="button"
               onClick={() => setSeoOpen((v) => !v)}
-              className="w-full flex items-center justify-between px-4 py-3 bg-cream dark:bg-charcoal text-sm font-medium text-charcoal dark:text-white hover:bg-cream/80 transition-colors"
+              className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 text-sm font-medium text-charcoal hover:bg-gray-50/80 transition-colors"
             >
               <span>SEO-Einstellungen</span>
-              {seoOpen ? <ChevronUp className="w-4 h-4 text-slate" /> : <ChevronDown className="w-4 h-4 text-slate" />}
+              {seoOpen ? <ChevronUp className="w-4 h-4 text-charcoal-light" /> : <ChevronDown className="w-4 h-4 text-charcoal-light" />}
             </button>
             {seoOpen && (
-              <div className="p-4 space-y-4 bg-white dark:bg-charcoal-light">
+              <div className="p-4 space-y-4 bg-white">
                 {/* Meta-Titel */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-sm font-medium text-slate">Meta-Titel</label>
-                    <span className={`text-xs ${form.meta_title.length > 60 ? "text-rose-gold" : "text-slate"}`}>
+                    <label className="text-sm font-medium text-charcoal-light">Meta-Titel</label>
+                    <span className={`text-xs ${form.meta_title.length > 60 ? "text-rose-gold" : "text-charcoal-light"}`}>
                       {form.meta_title.length}/70
                     </span>
                   </div>
@@ -218,14 +218,14 @@ function PageModal({
                     onChange={(e) => setForm((f) => ({ ...f, meta_title: e.target.value.slice(0, 70) }))}
                     placeholder="SEO-Titel der Seite"
                     maxLength={70}
-                    className="w-full px-4 py-2.5 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white"
+                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal"
                   />
                 </div>
                 {/* Meta-Beschreibung */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-sm font-medium text-slate">Meta-Beschreibung</label>
-                    <span className={`text-xs ${form.meta_description.length > 140 ? "text-rose-gold" : "text-slate"}`}>
+                    <label className="text-sm font-medium text-charcoal-light">Meta-Beschreibung</label>
+                    <span className={`text-xs ${form.meta_description.length > 140 ? "text-rose-gold" : "text-charcoal-light"}`}>
                       {form.meta_description.length}/160
                     </span>
                   </div>
@@ -235,7 +235,7 @@ function PageModal({
                     placeholder="Kurzbeschreibung für Suchmaschinen"
                     maxLength={160}
                     rows={3}
-                    className="w-full px-4 py-2.5 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white resize-none"
+                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal resize-none"
                   />
                 </div>
               </div>
@@ -251,20 +251,20 @@ function PageModal({
               onChange={(e) => setForm((f) => ({ ...f, show_in_nav: e.target.checked }))}
               className="w-4 h-4 accent-gold-dark rounded"
             />
-            <label htmlFor="show_in_nav" className="text-sm font-medium text-charcoal dark:text-white cursor-pointer">
+            <label htmlFor="show_in_nav" className="text-sm font-medium text-charcoal cursor-pointer">
               In Navigation anzeigen
             </label>
           </div>
 
           {form.show_in_nav && (
             <div>
-              <label className="block text-sm font-medium text-slate mb-1.5">Nav-Reihenfolge</label>
+              <label className="block text-sm font-medium text-charcoal-light mb-1.5">Nav-Reihenfolge</label>
               <input
                 type="number"
                 value={form.nav_order}
                 onChange={(e) => setForm((f) => ({ ...f, nav_order: Number(e.target.value) }))}
                 min={0}
-                className="w-32 px-4 py-2.5 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white"
+                className="w-32 px-4 py-2.5 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal"
               />
             </div>
           )}
@@ -278,17 +278,17 @@ function PageModal({
               onChange={(e) => setForm((f) => ({ ...f, is_published: e.target.checked }))}
               className="w-4 h-4 accent-gold-dark rounded"
             />
-            <label htmlFor="is_published" className="text-sm font-medium text-charcoal dark:text-white cursor-pointer">
+            <label htmlFor="is_published" className="text-sm font-medium text-charcoal cursor-pointer">
               Veröffentlicht
             </label>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gold/10">
+        <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm text-slate hover:text-charcoal dark:hover:text-white transition-colors"
+            className="px-4 py-2 text-sm text-charcoal-light hover:text-charcoal transition-colors"
           >
             Abbrechen
           </button>
@@ -314,8 +314,8 @@ export default function PagesTab() {
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const queryClient = useQueryClient();
 
-  const { data, isLoading } = useQuery<{ results: Page[]; count: number }>({
-    queryKey: ["admin", "pages"],
+  const { data, isLoading, error } = useQuery<{ results: Page[]; count: number }>({
+    queryKey: ["admin", "pages", "list"],
     queryFn: async () => {
       const res = await fetch("/api/admin/pages/", {
         headers: { Authorization: `Token ${localStorage.getItem("admin_token")}` },
@@ -323,9 +323,25 @@ export default function PagesTab() {
       if (!res.ok) throw new Error("Fehler beim Laden der Seiten");
       return res.json();
     },
+    retry: 1,
   });
 
-  const invalidate = () => queryClient.invalidateQueries({ queryKey: ["admin", "pages"] });
+  // Handle errors gracefully
+  if (error) {
+    return (
+      <div className="p-6 text-center">
+        <p className="text-red-500 mb-4">Fehler beim Laden der Seiten</p>
+        <button 
+          onClick={() => queryClient.invalidateQueries({ queryKey: ["admin", "pages", "list"] })}
+          className="btn-elegant"
+        >
+          Erneut versuchen
+        </button>
+      </div>
+    );
+  }
+
+  const invalidate = () => queryClient.invalidateQueries({ queryKey: ["admin", "pages", "list"] });
 
   const togglePublishMutation = useMutation({
     mutationFn: async ({ id, is_published }: { id: number; is_published: boolean }) => {
@@ -374,8 +390,8 @@ export default function PagesTab() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="font-display text-2xl text-charcoal dark:text-white">Seiten</h1>
-          <p className="text-slate mt-1">
+          <h1 className="font-display text-2xl text-charcoal">Seiten</h1>
+          <p className="text-charcoal-light mt-1">
             {data?.count ?? 0} {data?.count === 1 ? "Seite" : "Seiten"} verwalten
           </p>
         </div>
@@ -389,37 +405,37 @@ export default function PagesTab() {
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-charcoal-light rounded-xl shadow-elegant overflow-hidden">
+      <div className="bg-white rounded-xl shadow-elegant overflow-hidden">
         {pages.length === 0 ? (
           <div className="text-center py-16">
-            <FileText className="w-12 h-12 text-slate-light mx-auto mb-4" />
-            <p className="text-slate">Noch keine Seiten vorhanden</p>
+            <FileText className="w-12 h-12 text-charcoal-light-light mx-auto mb-4" />
+            <p className="text-charcoal-light">Noch keine Seiten vorhanden</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gold/10 text-left">
-                  <th className="px-5 py-3 text-xs font-semibold text-slate uppercase tracking-wide">Titel</th>
-                  <th className="px-5 py-3 text-xs font-semibold text-slate uppercase tracking-wide">Slug</th>
-                  <th className="px-5 py-3 text-xs font-semibold text-slate uppercase tracking-wide">Template</th>
-                  <th className="px-5 py-3 text-xs font-semibold text-slate uppercase tracking-wide">Status</th>
-                  <th className="px-5 py-3 text-xs font-semibold text-slate uppercase tracking-wide">Sections</th>
-                  <th className="px-5 py-3 text-xs font-semibold text-slate uppercase tracking-wide">Navigation</th>
-                  <th className="px-5 py-3 text-xs font-semibold text-slate uppercase tracking-wide w-36">Aktionen</th>
+                <tr className="border-b border-gray-200 text-left">
+                  <th className="px-5 py-3 text-xs font-semibold text-charcoal-light uppercase tracking-wide">Titel</th>
+                  <th className="px-5 py-3 text-xs font-semibold text-charcoal-light uppercase tracking-wide">Slug</th>
+                  <th className="px-5 py-3 text-xs font-semibold text-charcoal-light uppercase tracking-wide">Template</th>
+                  <th className="px-5 py-3 text-xs font-semibold text-charcoal-light uppercase tracking-wide">Status</th>
+                  <th className="px-5 py-3 text-xs font-semibold text-charcoal-light uppercase tracking-wide">Sections</th>
+                  <th className="px-5 py-3 text-xs font-semibold text-charcoal-light uppercase tracking-wide">Navigation</th>
+                  <th className="px-5 py-3 text-xs font-semibold text-charcoal-light uppercase tracking-wide w-36">Aktionen</th>
                 </tr>
               </thead>
               <tbody>
                 {pages.map((page) => (
                   <tr
                     key={page.id}
-                    className="border-b border-gold/5 last:border-0 hover:bg-cream/30 dark:hover:bg-charcoal/30 transition-colors"
+                    className="border-b border-gray-200 last:border-0 hover:bg-gray-50/30/30 transition-colors"
                   >
-                    <td className="px-5 py-3.5 font-medium text-charcoal dark:text-white whitespace-nowrap">
+                    <td className="px-5 py-3.5 font-medium text-charcoal whitespace-nowrap">
                       {page.title}
                     </td>
                     <td className="px-5 py-3.5">
-                      <span className="font-mono text-xs text-slate bg-slate/5 px-2 py-1 rounded">
+                      <span className="font-mono text-xs text-charcoal-light bg-slate/5 px-2 py-1 rounded">
                         /{page.slug}
                       </span>
                     </td>
@@ -435,22 +451,22 @@ export default function PagesTab() {
                           Veröffentlicht
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate/10 text-slate">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate/10 text-charcoal-light">
                           <span className="w-1.5 h-1.5 rounded-full bg-slate inline-block" />
                           Entwurf
                         </span>
                       )}
                     </td>
-                    <td className="px-5 py-3.5 text-slate">
+                    <td className="px-5 py-3.5 text-charcoal-light">
                       {page.sections_count}
                     </td>
-                    <td className="px-5 py-3.5 text-slate">
+                    <td className="px-5 py-3.5 text-charcoal-light">
                       {page.show_in_nav ? `Ja (${page.nav_order})` : "–"}
                     </td>
                     <td className="px-5 py-3.5">
                       {deletingId === page.id ? (
                         <div className="flex items-center gap-1">
-                          <span className="text-xs text-slate mr-1">Löschen?</span>
+                          <span className="text-xs text-charcoal-light mr-1">Löschen?</span>
                           <button
                             onClick={() => deleteMutation.mutate(page.id)}
                             disabled={deleteMutation.isPending}
@@ -460,7 +476,7 @@ export default function PagesTab() {
                           </button>
                           <button
                             onClick={() => setDeletingId(null)}
-                            className="px-2 py-1 text-xs bg-slate/10 text-slate rounded hover:bg-slate/20 transition-colors"
+                            className="px-2 py-1 text-xs bg-slate/10 text-charcoal-light rounded hover:bg-slate/20 transition-colors"
                           >
                             Nein
                           </button>
@@ -470,7 +486,7 @@ export default function PagesTab() {
                           <button
                             onClick={() => setEditingPage(page)}
                             title="Bearbeiten"
-                            className="p-1.5 text-slate hover:text-gold-dark hover:bg-gold/5 rounded-lg transition-colors"
+                            className="p-1.5 text-charcoal-light hover:text-gold-dark hover:bg-gold/5 rounded-lg transition-colors"
                           >
                             <Pencil className="w-4 h-4" />
                           </button>
@@ -482,14 +498,14 @@ export default function PagesTab() {
                               })
                             }
                             title={page.is_published ? "Auf Entwurf setzen" : "Veröffentlichen"}
-                            className="p-1.5 text-slate hover:text-gold-dark hover:bg-gold/5 rounded-lg transition-colors"
+                            className="p-1.5 text-charcoal-light hover:text-gold-dark hover:bg-gold/5 rounded-lg transition-colors"
                           >
                             {page.is_published ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                           </button>
                           <button
                             onClick={() => setDeletingId(page.id)}
                             title="Löschen"
-                            className="p-1.5 text-slate hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                            className="p-1.5 text-charcoal-light hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>

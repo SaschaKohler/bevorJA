@@ -36,10 +36,13 @@ from orders.admin_views import (
     admin_customer_detail,
 )
 from content.admin_views import (
-    admin_site_content_list,
-    admin_site_content_detail,
     admin_sections_list,
     admin_section_reorder,
+    admin_pages_list,
+    admin_page_detail,
+    admin_media_list,
+    admin_media_upload,
+    admin_media_detail,
 )
 
 urlpatterns = [
@@ -84,12 +87,16 @@ urlpatterns = [
     # Admin customers
     path("api/admin/customers/", admin_customers_list, name="admin-customers-list"),
     path("api/admin/customers/<str:email>/", admin_customer_detail, name="admin-customer-detail"),
-    # Admin site content
-    path("api/admin/site-content/", admin_site_content_list, name="admin-site-content-list"),
-    path("api/admin/site-content/<int:pk>/", admin_site_content_detail, name="admin-site-content-detail"),
-    # Admin sections (extended)
+    # Admin sections
     path("api/admin/sections/list/", admin_sections_list, name="admin-sections-list"),
     path("api/admin/sections/reorder/", admin_section_reorder, name="admin-sections-reorder"),
+    # Admin media/mediathek
+    path("api/admin/media/", admin_media_list, name="admin-media-list"),
+    path("api/admin/media/upload/", admin_media_upload, name="admin-media-upload"),
+    path("api/admin/media/<int:pk>/", admin_media_detail, name="admin-media-detail"),
+    # Admin pages
+    path("api/admin/pages/", admin_pages_list, name="admin-pages-list"),
+    path("api/admin/pages/<int:pk>/", admin_page_detail, name="admin-page-detail"),
 ]
 
 if settings.DEBUG:

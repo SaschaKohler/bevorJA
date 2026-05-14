@@ -8,15 +8,15 @@ interface Feature {
 }
 
 export default function SectionFeaturesGrid({ section }: { section: CustomSection }) {
-  const c = section.content as { headline?: string; features?: Feature[] };
+  const c = section.content as { title?: string; subtitle?: string; features?: Feature[] };
   const features = c.features || [];
 
   return (
     <section id={section.anchor} className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-4">
-        {c.headline && (
+        {c.title && (
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl text-charcoal mb-4">{c.headline}</h2>
+            <h2 className="font-display text-4xl text-charcoal mb-4">{c.title}</h2>
             <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto" />
           </div>
         )}

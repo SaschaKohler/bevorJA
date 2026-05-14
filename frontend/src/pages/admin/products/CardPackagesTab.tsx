@@ -52,8 +52,8 @@ export default function CardPackagesTab() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-2xl text-charcoal dark:text-white">Kartenpakete</h1>
-          <p className="text-slate mt-1">Verwalten Sie Kartenpakete und Preise</p>
+          <h1 className="font-display text-2xl text-charcoal">Kartenpakete</h1>
+          <p className="text-charcoal-light mt-1">Verwalten Sie Kartenpakete und Preise</p>
         </div>
         <button
           onClick={() => setIsCreateModalOpen(true)}
@@ -65,46 +65,46 @@ export default function CardPackagesTab() {
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-charcoal-light rounded-xl shadow-elegant overflow-hidden">
+      <div className="bg-white rounded-xl shadow-elegant overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-cream dark:bg-charcoal border-b border-gold/10 dark:border-gold/20">
+            <thead className="bg-gray-50 border-b border-gray-200 dark:border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate dark:text-slate-light uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-charcoal-light dark:text-charcoal-light-light uppercase tracking-wider">
                   Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate dark:text-slate-light uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-charcoal-light dark:text-charcoal-light-light uppercase tracking-wider">
                   Karten-Anzahl
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate dark:text-slate-light uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-charcoal-light dark:text-charcoal-light-light uppercase tracking-wider">
                   Preis
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate dark:text-slate-light uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-charcoal-light dark:text-charcoal-light-light uppercase tracking-wider">
                   Designs
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-slate dark:text-slate-light uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-charcoal-light dark:text-charcoal-light-light uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-slate dark:text-slate-light uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-charcoal-light dark:text-charcoal-light-light uppercase tracking-wider">
                   Aktionen
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gold/10 dark:divide-gold/20">
               {packages?.map((pkg) => (
-                <tr key={pkg.id} className="hover:bg-cream/50 dark:hover:bg-charcoal transition-colors">
+                <tr key={pkg.id} className="hover:bg-gray-50/50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-charcoal dark:text-white">
+                      <div className="text-sm font-medium text-charcoal">
                         {pkg.name}
                       </div>
-                      <div className="text-xs text-slate dark:text-slate-light">
+                      <div className="text-xs text-charcoal-light dark:text-charcoal-light-light">
                         /{pkg.slug}
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm text-charcoal dark:text-white">
+                    <span className="text-sm text-charcoal">
                       {pkg.card_count}
                     </span>
                   </td>
@@ -115,7 +115,7 @@ export default function CardPackagesTab() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm text-slate dark:text-slate-light">
+                      <span className="text-sm text-charcoal-light dark:text-charcoal-light-light">
                         {pkg.available_designs.length}
                       </span>
                       <div className="flex -space-x-1">
@@ -130,7 +130,7 @@ export default function CardPackagesTab() {
                         ))}
                         {pkg.available_designs.length > 3 && (
                           <div className="w-6 h-6 bg-slate/10 border border-white dark:border-charcoal rounded-full flex items-center justify-center">
-                            <span className="text-xs text-slate dark:text-slate-light">
+                            <span className="text-xs text-charcoal-light dark:text-charcoal-light-light">
                               +{pkg.available_designs.length - 3}
                             </span>
                           </div>
@@ -142,7 +142,7 @@ export default function CardPackagesTab() {
                     <span className={`px-2 py-1 rounded-full text-xs ${
                       pkg.is_active 
                         ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" 
-                        : "bg-slate-100 text-slate dark:bg-slate-700 dark:text-slate-300"
+                        : "bg-slate-100 text-charcoal-light dark:bg-slate-700 dark:text-charcoal-light-300"
                     }`}>
                       {pkg.is_active ? "Aktiv" : "Inaktiv"}
                     </span>
@@ -159,7 +159,7 @@ export default function CardPackagesTab() {
                         </button>
                         <button
                           onClick={() => setDeleteConfirmId(null)}
-                          className="p-1 text-slate hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"
+                          className="p-1 text-charcoal-light hover:bg-slate-100 dark:hover:bg-slate-700 rounded transition-colors"
                           title="Abbrechen"
                         >
                           <X className="w-4 h-4" />
@@ -169,14 +169,14 @@ export default function CardPackagesTab() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => setEditingPackage(pkg)}
-                          className="p-1 text-slate hover:text-gold-dark hover:bg-gold/5 dark:hover:bg-gold/10 rounded transition-colors"
+                          className="p-1 text-charcoal-light hover:text-gold-dark hover:bg-gold/5 dark:hover:bg-gold/10 rounded transition-colors"
                           title="Bearbeiten"
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => setDeleteConfirmId(pkg.id)}
-                          className="p-1 text-slate hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
+                          className="p-1 text-charcoal-light hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
                           title="Löschen"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -192,9 +192,9 @@ export default function CardPackagesTab() {
       </div>
 
       {!packages?.length && (
-        <div className="text-center py-12 bg-white dark:bg-charcoal-light rounded-xl">
-          <CreditCard className="w-12 h-12 text-slate-light mx-auto mb-4" />
-          <p className="text-slate">Keine Kartenpakete vorhanden</p>
+        <div className="text-center py-12 bg-white rounded-xl">
+          <CreditCard className="w-12 h-12 text-charcoal-light-light mx-auto mb-4" />
+          <p className="text-charcoal-light">Keine Kartenpakete vorhanden</p>
         </div>
       )}
 
@@ -332,14 +332,14 @@ function CardPackageModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-charcoal-light rounded-2xl shadow-elegant p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-elegant p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-display text-xl text-charcoal dark:text-white">
+          <h2 className="font-display text-xl text-charcoal">
             {cardPackage ? "Kartenpaket bearbeiten" : "Neues Kartenpaket"}
           </h2>
           <button
             onClick={onClose}
-            className="text-slate hover:text-charcoal dark:hover:text-white transition-colors"
+            className="text-charcoal-light hover:text-charcoal transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -348,14 +348,14 @@ function CardPackageModal({
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-1">
+            <label className="block text-sm font-medium text-charcoal-light dark:text-charcoal-light-light mb-1">
               Name *
             </label>
             <input
               type="text"
               value={formData.name || ""}
               onChange={(e) => handleNameChange(e.target.value)}
-              className="w-full px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
               required
             />
             {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
@@ -363,28 +363,28 @@ function CardPackageModal({
 
           {/* Slug */}
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-1">
+            <label className="block text-sm font-medium text-charcoal-light dark:text-charcoal-light-light mb-1">
               Slug
             </label>
             <input
               type="text"
               value={formData.slug || ""}
               onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
-              className="w-full px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
             />
             {errors.slug && <p className="text-red-500 text-xs mt-1">{errors.slug}</p>}
           </div>
 
           {/* Card Count */}
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-1">
+            <label className="block text-sm font-medium text-charcoal-light dark:text-charcoal-light-light mb-1">
               Kartenanzahl *
             </label>
             <input
               type="number"
               value={formData.card_count || ""}
               onChange={(e) => setFormData(prev => ({ ...prev, card_count: parseInt(e.target.value) || 0 }))}
-              className="w-full px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
               required
               min="1"
             />
@@ -393,17 +393,17 @@ function CardPackageModal({
 
           {/* Price */}
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-1">
+            <label className="block text-sm font-medium text-charcoal-light dark:text-charcoal-light-light mb-1">
               Preis (€) *
             </label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate dark:text-slate-light">€</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-light dark:text-charcoal-light-light">€</span>
               <input
                 type="number"
                 step="0.01"
                 value={formData.price || ""}
                 onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
-                className="w-full pl-8 pr-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+                className="w-full pl-8 pr-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
                 required
               />
             </div>
@@ -412,7 +412,7 @@ function CardPackageModal({
 
           {/* Available Designs */}
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-1">
+            <label className="block text-sm font-medium text-charcoal-light dark:text-charcoal-light-light mb-1">
               Verfügbare Designs
             </label>
             <div className="space-y-2">
@@ -423,12 +423,12 @@ function CardPackageModal({
                     value={design}
                     onChange={(e) => updateDesign(index, e.target.value)}
                     placeholder="Design-Name eingeben"
-                    className="flex-1 px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+                    className="flex-1 px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
                   />
                   <button
                     type="button"
                     onClick={() => removeDesign(index)}
-                    className="p-2 text-slate hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                    className="p-2 text-charcoal-light hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -437,7 +437,7 @@ function CardPackageModal({
               <button
                 type="button"
                 onClick={addDesign}
-                className="w-full py-2 border border-gold/20 dark:border-gold/10 rounded-lg text-slate dark:text-slate-light hover:bg-gold/5 dark:hover:bg-gold/10 transition-colors text-sm"
+                className="w-full py-2 border border-gray-200 dark:border-gray-200 rounded-lg text-charcoal-light dark:text-charcoal-light-light hover:bg-gold/5 dark:hover:bg-gold/10 transition-colors text-sm"
               >
                 + Design hinzufügen
               </button>
@@ -447,21 +447,21 @@ function CardPackageModal({
 
           {/* Sort Order */}
           <div>
-            <label className="block text-sm font-medium text-slate dark:text-slate-light mb-1">
+            <label className="block text-sm font-medium text-charcoal-light dark:text-charcoal-light-light mb-1">
               Sort-Order
             </label>
             <input
               type="number"
               value={formData.sort_order || ""}
               onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))}
-              className="w-full px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm"
+              className="w-full px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm"
             />
             {errors.sort_order && <p className="text-red-500 text-xs mt-1">{errors.sort_order}</p>}
           </div>
 
           {/* Occasion Info */}
-          <div className="p-3 bg-cream dark:bg-charcoal rounded-lg">
-            <p className="text-xs text-slate dark:text-slate-light">
+          <div className="p-3 bg-gray-50 rounded-lg">
+            <p className="text-xs text-charcoal-light dark:text-charcoal-light-light">
               <strong>Hinweis:</strong> Anlass-Zuordnungen werden über Produktvarianten verwaltet.
               {cardPackage?.occasion_slugs && cardPackage.occasion_slugs.length > 0 && (
                 <span className="block mt-1">
@@ -478,9 +478,9 @@ function CardPackageModal({
               id="is_active"
               checked={formData.is_active || false}
               onChange={(e) => setFormData(prev => ({ ...prev, is_active: e.target.checked }))}
-              className="w-4 h-4 text-gold border-gold/20 rounded focus:ring-gold/50"
+              className="w-4 h-4 text-gold border-gray-200 rounded focus:ring-gold/50"
             />
-            <label htmlFor="is_active" className="text-sm text-slate dark:text-slate-light">
+            <label htmlFor="is_active" className="text-sm text-charcoal-light dark:text-charcoal-light-light">
               Aktiv
             </label>
           </div>
@@ -490,7 +490,7 @@ function CardPackageModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gold/20 rounded-lg text-slate dark:text-slate-light hover:bg-cream dark:hover:bg-charcoal transition-colors text-sm"
+              className="flex-1 px-4 py-2 border border-gray-200 rounded-lg text-charcoal-light dark:text-charcoal-light-light hover:bg-gray-50 transition-colors text-sm"
             >
               Abbrechen
             </button>

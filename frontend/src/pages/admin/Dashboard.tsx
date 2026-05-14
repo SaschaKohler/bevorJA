@@ -23,7 +23,7 @@ import { format, subDays } from "date-fns";
 import { de } from "date-fns/locale";
 import type { DashboardStats, ChartData } from "@/types";
 
-const COLORS = ["#d4a574", "#8b7355", "#a8a29e", "#78716c"];
+const COLORS = ["#D4AF37", "#B8941D", "#8B7355", "#B76E79"];
 
 function StatCard({
   title,
@@ -41,20 +41,20 @@ function StatCard({
   description?: string;
 }) {
   return (
-    <div className="bg-white dark:bg-charcoal-light rounded-xl p-6 shadow-elegant">
+    <div className="bg-white rounded-xl p-6 shadow-elegant border border-gray-100 hover:shadow-lg transition-shadow">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-sm text-slate dark:text-slate-light">{title}</p>
-          <p className="text-2xl font-display text-charcoal dark:text-white mt-1">{value}</p>
+          <p className="text-sm font-medium text-charcoal-light uppercase tracking-wide">{title}</p>
+          <p className="text-2xl font-display text-charcoal mt-2">{value}</p>
           {trend && (
-            <div className={`flex items-center gap-1 mt-2 text-sm ${trendUp ? "text-green-600" : "text-rose-gold"}`}>
+            <div className={`flex items-center gap-1 mt-2 text-sm font-medium ${trendUp ? "text-green-600" : "text-rose-gold"}`}>
               {trendUp ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
               <span>{trend}</span>
             </div>
           )}
-          {description && <p className="text-xs text-slate mt-2">{description}</p>}
+          {description && <p className="text-xs text-charcoal-light mt-2">{description}</p>}
         </div>
-        <div className="w-12 h-12 bg-gold/10 dark:bg-gold/20 rounded-lg flex items-center justify-center">
+        <div className="w-12 h-12 bg-gradient-to-br from-gold/20 to-gold/5 rounded-xl flex items-center justify-center">
           <Icon className="w-6 h-6 text-gold-dark" />
         </div>
       </div>
@@ -67,16 +67,17 @@ function DashboardSkeleton() {
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="bg-white dark:bg-charcoal-light rounded-xl p-6 shadow-elegant animate-pulse">
-            <div className="h-4 bg-slate/20 rounded w-24 mb-4" />
-            <div className="h-8 bg-slate/20 rounded w-32" />
+          <div key={i} className="bg-white rounded-xl p-6 shadow-elegant border border-gray-100 animate-pulse">
+            <div className="h-3 bg-gray-200 rounded w-24 mb-4" />
+            <div className="h-8 bg-gray-200 rounded w-32" />
           </div>
         ))}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {[...Array(2)].map((_, i) => (
-          <div key={i} className="bg-white dark:bg-charcoal-light rounded-xl p-6 shadow-elegant animate-pulse h-80">
-            <div className="h-4 bg-slate/20 rounded w-32 mb-4" />
+          <div key={i} className="bg-white rounded-xl p-6 shadow-elegant border border-gray-100 animate-pulse h-80">
+            <div className="h-4 bg-gray-200 rounded w-32 mb-4" />
+            <div className="h-48 bg-gray-100 rounded mt-6" />
           </div>
         ))}
       </div>
@@ -129,7 +130,7 @@ export default function Dashboard() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <h1 className="font-display text-2xl text-charcoal dark:text-white">Dashboard</h1>
+        <h1 className="font-display text-3xl text-charcoal">Dashboard</h1>
         <DashboardSkeleton />
       </div>
     );
@@ -144,10 +145,15 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-display text-2xl text-charcoal dark:text-white">Dashboard</h1>
-        <p className="text-sm text-slate">
-          Letzte Aktualisierung: {format(new Date(), "dd.MM.yyyy HH:mm")}
+      <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+        <div>
+          <h1 className="font-display text-3xl text-charcoal">Dashboard</h1>
+          <p className="text-sm text-charcoal-light mt-1">
+            Willkommen zurück! Hier ist die Übersicht Ihres Geschäfts.
+          </p>
+        </div>
+        <p className="text-sm text-charcoal-light bg-white px-3 py-1.5 rounded-lg shadow-sm border border-gray-100">
+          {format(new Date(), "dd.MM.yyyy, HH:mm")}
         </p>
       </div>
 
@@ -187,14 +193,17 @@ export default function Dashboard() {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Revenue Chart */}
-        <div className="bg-white dark:bg-charcoal-light rounded-xl p-6 shadow-elegant">
-          <h3 className="font-serif text-lg text-charcoal dark:text-white mb-4">Umsatz (7 Tage)</h3>
+        <div className="bg-white rounded-xl p-6 shadow-elegant border border-gray-100">
+          <h3 className="font-serif text-lg text-charcoal mb-4 flex items-center gap-2">
+            <CreditCard className="w-5 h-5 text-gold" />
+            Umsatz (7 Tage)
+          </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={revenueData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="date" stroke="#78716c" fontSize={12} />
-                <YAxis stroke="#78716c" fontSize={12} tickFormatter={(value) => `€${value}`} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+                <XAxis dataKey="date" stroke="#9ca3af" fontSize={12} />
+                <YAxis stroke="#9ca3af" fontSize={12} tickFormatter={(value) => `€${value}`} />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "white",
@@ -216,8 +225,11 @@ export default function Dashboard() {
         </div>
 
         {/* Order Status Chart */}
-        <div className="bg-white dark:bg-charcoal-light rounded-xl p-6 shadow-elegant">
-          <h3 className="font-serif text-lg text-charcoal dark:text-white mb-4">Bestellstatus</h3>
+        <div className="bg-white rounded-xl p-6 shadow-elegant border border-gray-100">
+          <h3 className="font-serif text-lg text-charcoal mb-4 flex items-center gap-2">
+            <ShoppingBag className="w-5 h-5 text-gold" />
+            Bestellstatus
+          </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -246,13 +258,13 @@ export default function Dashboard() {
           </div>
           <div className="flex flex-wrap justify-center gap-4 mt-4">
             {orderStatusData.map((entry, index) => (
-              <div key={entry.name} className="flex items-center gap-2 text-sm">
+              <div key={entry.name} className="flex items-center gap-2 text-sm bg-gray-50 px-3 py-1.5 rounded-full">
                 <div
                   className="w-3 h-3 rounded-full"
                   style={{ backgroundColor: entry.color || COLORS[index % COLORS.length] }}
                 />
-                <span className="text-slate dark:text-slate-light">
-                  {entry.name}: {entry.value}
+                <span className="text-charcoal font-medium">
+                  {entry.name}: <span className="text-charcoal-light">{entry.value}</span>
                 </span>
               </div>
             ))}
@@ -261,9 +273,12 @@ export default function Dashboard() {
       </div>
 
       {/* Recent Orders */}
-      <div className="bg-white dark:bg-charcoal-light rounded-xl p-6 shadow-elegant">
+      <div className="bg-white rounded-xl p-6 shadow-elegant border border-gray-100">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-serif text-lg text-charcoal dark:text-white">Neueste Bestellungen</h3>
+          <h3 className="font-serif text-lg text-charcoal flex items-center gap-2">
+            <Package className="w-5 h-5 text-gold" />
+            Neueste Bestellungen
+          </h3>
           <a href="/admin/orders" className="text-gold-dark hover:text-gold text-sm">
             Alle anzeigen
           </a>
@@ -271,33 +286,36 @@ export default function Dashboard() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gold/10">
-                <th className="text-left py-3 px-4 text-slate font-medium">Bestellung</th>
-                <th className="text-left py-3 px-4 text-slate font-medium">Kunde</th>
-                <th className="text-left py-3 px-4 text-slate font-medium">Datum</th>
-                <th className="text-left py-3 px-4 text-slate font-medium">Betrag</th>
-                <th className="text-left py-3 px-4 text-slate font-medium">Status</th>
+              <tr className="border-b-2 border-gray-100 bg-gray-50">
+                <th className="text-left py-3 px-4 text-charcoal-light font-semibold uppercase text-xs tracking-wider">Bestellung</th>
+                <th className="text-left py-3 px-4 text-charcoal-light font-semibold uppercase text-xs tracking-wider">Kunde</th>
+                <th className="text-left py-3 px-4 text-charcoal-light font-semibold uppercase text-xs tracking-wider">Datum</th>
+                <th className="text-left py-3 px-4 text-charcoal-light font-semibold uppercase text-xs tracking-wider">Betrag</th>
+                <th className="text-left py-3 px-4 text-charcoal-light font-semibold uppercase text-xs tracking-wider">Status</th>
               </tr>
             </thead>
             <tbody>
               {stats?.recentOrders?.map((order) => (
-                <tr key={order.id} className="border-b border-gold/5 hover:bg-cream/50">
-                  <td className="py-3 px-4 text-charcoal dark:text-white font-medium">
+                <tr key={order.id} className="border-b border-gray-100 hover:bg-gold/5 transition-colors">
+                  <td className="py-3.5 px-4 text-charcoal font-semibold">
                     #{order.order_number.slice(0, 8)}
                   </td>
-                  <td className="py-3 px-4 text-slate">{order.customer_name}</td>
-                  <td className="py-3 px-4 text-slate">
+                  <td className="py-3.5 px-4 text-charcoal-light">{order.customer_name}</td>
+                  <td className="py-3.5 px-4 text-charcoal-light">
                     {format(new Date(order.created_at), "dd.MM.yyyy")}
                   </td>
-                  <td className="py-3 px-4 text-charcoal dark:text-white">€{order.total}</td>
-                  <td className="py-3 px-4">
+                  <td className="py-3.5 px-4 text-charcoal font-semibold">€{order.total}</td>
+                  <td className="py-3.5 px-4">
                     <StatusBadge status={order.status} />
                   </td>
                 </tr>
               )) || (
                 <tr>
-                  <td colSpan={5} className="py-8 text-center text-slate">
-                    Keine Bestellungen vorhanden
+                  <td colSpan={5} className="py-12 text-center text-charcoal-light">
+                    <div className="flex flex-col items-center gap-2">
+                      <ShoppingBag className="w-8 h-8 text-gray-300" />
+                      <span>Keine Bestellungen vorhanden</span>
+                    </div>
                   </td>
                 </tr>
               )}

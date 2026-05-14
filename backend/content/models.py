@@ -1,56 +1,37 @@
 from django.db import models
 
 
-class SiteContent(models.Model):
-    SECTION_CHOICES = [
-        ('hero', 'Hero Bereich'),
-        ('hero_features', 'Hero Features'),
-        ('features', 'Features Bereich'),
-        ('products', 'Produkte Bereich'),
-        ('cta', 'Call-to-Action Bereich'),
-        ('footer', 'Footer Bereich'),
+class Page(models.Model):
+    """Pages are containers for sections that can be displayed as one-page layouts."""
+    TEMPLATE_CHOICES = [
+        ('default', 'Standard'),
+        ('landing', 'Landingpage'),
+        ('shop', 'Shop'),
     ]
-    
-    KEY_CHOICES = [
-        # Hero
-        ('title', 'Titel'),
-        ('subtitle', 'Untertitel'),
-        ('description', 'Beschreibung'),
-        ('button_text', 'Button Text'),
-        # Features
-        ('feature_1_title', 'Feature 1 Titel'),
-        ('feature_1_desc', 'Feature 1 Beschreibung'),
-        ('feature_2_title', 'Feature 2 Titel'),
-        ('feature_2_desc', 'Feature 2 Beschreibung'),
-        ('feature_3_title', 'Feature 3 Titel'),
-        ('feature_3_desc', 'Feature 3 Beschreibung'),
-        # CTA
-        ('cta_title', 'CTA Titel'),
-        ('cta_description', 'CTA Beschreibung'),
-        ('cta_button', 'CTA Button Text'),
-        # Footer
-        ('footer_tagline', 'Footer Tagline'),
-        ('contact_email', 'Kontakt Email'),
-    ]
-    
-    section = models.CharField(max_length=50, choices=SECTION_CHOICES)
-    key = models.CharField(max_length=100, choices=KEY_CHOICES)
-    content = models.TextField(blank=True)
-    content_en = models.TextField(blank=True, verbose_name='Content (EN)')
-    image = models.ImageField(upload_to='content/', blank=True, null=True)
-    order = models.PositiveIntegerField(default=0)
-    is_active = models.BooleanField(default=True)
+
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
+    template = models.CharField(max_length=50, choices=TEMPLATE_CHOICES, default='default')
+    meta_title = models.CharField(max_length=70, blank=True)
+    meta_description = models.CharField(max_length=160, blank=True)
+    is_published = models.BooleanField(default=False)
+    published_at = models.DateTimeField(null=True, blank=True)
+    show_in_nav = models.BooleanField(default=False)
+    nav_order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
-        ordering = ['section', 'order', 'key']
-        verbose_name = 'Seiteninhalt'
-        verbose_name_plural = 'Seiteninhalte'
-        unique_together = ['section', 'key']
-    
+        ordering = ['nav_order', 'title']
+        verbose_name = 'Seite'
+        verbose_name_plural = 'Seiten'
+
     def __str__(self):
-        return f"{self.get_section_display()} - {self.get_key_display()}"
+        return self.title
+
+    @property
+    def sections_count(self):
+        return self.sections.filter(is_active=True).count()
 
 
 class HomeFeature(models.Model):
@@ -86,6 +67,12 @@ class CustomSection(models.Model):
         ('contact', 'Kontakt-Formular'),
     ]
 
+    page = models.ForeignKey(
+        Page,
+        on_delete=models.CASCADE,
+        related_name='sections',
+        verbose_name='Zugeordnete Seite'
+    )
     title = models.CharField(max_length=200)
     anchor = models.SlugField(unique=True)
     template_type = models.CharField(max_length=50, choices=TEMPLATE_CHOICES)
@@ -93,13 +80,6 @@ class CustomSection(models.Model):
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    # Beziehung zu Seiteninhalten
-    site_contents = models.ManyToManyField(
-        SiteContent,
-        related_name='custom_sections',
-        blank=True,
-        verbose_name='Zugeordnete Seiteninhalte'
-    )
 
     class Meta:
         ordering = ['order']

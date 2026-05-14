@@ -1,32 +1,15 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from .models import SiteContent, HomeFeature, CustomSection, SectionImage
+from .models import HomeFeature, CustomSection, SectionImage, Page
 from .serializers import (
-    SiteContentSerializer,
     HomeFeatureSerializer,
     CustomSectionSerializer,
     SectionImageSerializer,
 )
-
-
-class SiteContentViewSet(viewsets.ModelViewSet):
-    queryset = SiteContent.objects.filter(is_active=True)
-    serializer_class = SiteContentSerializer
-    
-    def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
-            return [AllowAny()]
-        return [IsAdminUser()]
-    
-    def get_queryset(self):
-        section = self.request.query_params.get('section')
-        if section:
-            return SiteContent.objects.filter(is_active=True, section=section)
-        return SiteContent.objects.filter(is_active=True)
 
 
 class HomeFeatureViewSet(viewsets.ModelViewSet):
@@ -43,42 +26,30 @@ class HomeFeatureViewSet(viewsets.ModelViewSet):
 @permission_classes([AllowAny])
 def get_home_content(request):
     """Get all content needed for the home page"""
-    content = SiteContent.objects.filter(is_active=True)
     features = HomeFeature.objects.filter(is_active=True).order_by('order')
-    
-    # Group content by section
-    content_by_section = {}
-    for item in content:
-        if item.section not in content_by_section:
-            content_by_section[item.section] = {}
-        content_by_section[item.section][item.key] = {
-            'content': item.content,
-            'content_en': item.content_en,
-            'image': item.image.url if item.image else None,
-        }
-    
+
+    # Get home page sections (page with slug 'home', empty slug, or first published page)
+    home_page = Page.objects.filter(slug='home', is_published=True).first()
+    if not home_page:
+        home_page = Page.objects.filter(slug='', is_published=True).first()
+    if not home_page:
+        home_page = Page.objects.filter(is_published=True).first()
+
+    page_sections = []
+    if home_page:
+        page_sections = CustomSection.objects.filter(
+            page=home_page, is_active=True
+        ).order_by('order')
+
     return Response({
-        'sections': content_by_section,
-        'hero_features': HomeFeatureSerializer(features, many=True).data
+        'hero_features': HomeFeatureSerializer(features, many=True).data,
+        'page': {
+            'id': home_page.id if home_page else None,
+            'title': home_page.title if home_page else None,
+            'slug': home_page.slug if home_page else None,
+        } if home_page else None,
+        'sections': CustomSectionSerializer(page_sections, many=True).data,
     })
-
-
-@api_view(['PATCH'])
-@permission_classes([IsAuthenticated])
-def update_content(request, pk):
-    """Update a specific content item"""
-    content = get_object_or_404(SiteContent, pk=pk)
-    
-    allowed_fields = ['content', 'content_en', 'order', 'is_active']
-    for field in allowed_fields:
-        if field in request.data:
-            setattr(content, field, request.data[field])
-    
-    if 'image' in request.FILES:
-        content.image = request.FILES['image']
-    
-    content.save()
-    return Response(SiteContentSerializer(content).data)
 
 
 # --- CustomSection endpoints ---
@@ -88,6 +59,16 @@ def update_content(request, pk):
 def list_sections(request):
     sections = CustomSection.objects.filter(is_active=True)
     return Response(CustomSectionSerializer(sections, many=True).data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def admin_list_sections(request):
+    page_id = request.query_params.get('page')
+    qs = CustomSection.objects.all().order_by('order')
+    if page_id:
+        qs = qs.filter(page_id=page_id)
+    return Response(CustomSectionSerializer(qs, many=True).data)
 
 
 @api_view(['POST'])
@@ -100,10 +81,13 @@ def admin_create_section(request):
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-@api_view(['PATCH', 'DELETE'])
+@api_view(['GET', 'PATCH', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def admin_manage_section(request, pk):
     section = get_object_or_404(CustomSection, pk=pk)
+
+    if request.method == 'GET':
+        return Response(CustomSectionSerializer(section).data)
 
     if request.method == 'DELETE':
         section.delete()
@@ -113,10 +97,6 @@ def admin_manage_section(request, pk):
     for field in allowed_fields:
         if field in request.data:
             setattr(section, field, request.data[field])
-
-    # Handle site_contents many-to-many relationship
-    if 'site_content_ids' in request.data:
-        section.site_contents.set(request.data['site_content_ids'])
 
     section.save()
     return Response(CustomSectionSerializer(section).data)

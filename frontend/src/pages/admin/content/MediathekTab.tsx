@@ -51,7 +51,7 @@ const authHeader = () => ({
 const PAGE_SIZE = 20;
 
 const inputCls =
-  "w-full px-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white text-sm";
+  "w-full px-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal text-sm";
 
 // ─── MediaDetailModal ─────────────────────────────────────────────────────────
 
@@ -107,22 +107,22 @@ function MediaDetailModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-charcoal-light rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-elegant">
+      <div className="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-elegant">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
-          <h2 className="font-display text-xl text-charcoal dark:text-white">
+          <h2 className="font-display text-xl text-charcoal">
             Bild-Details
           </h2>
           <button
             onClick={onClose}
-            className="text-slate hover:text-charcoal dark:hover:text-white transition-colors"
+            className="text-charcoal-light hover:text-charcoal transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Preview */}
-        <div className="rounded-xl overflow-hidden bg-cream dark:bg-charcoal mb-5 flex items-center justify-center max-h-64">
+        <div className="rounded-xl overflow-hidden bg-gray-50 mb-5 flex items-center justify-center max-h-64">
           <img
             src={item.file_url}
             alt={item.alt_text || item.title}
@@ -131,16 +131,16 @@ function MediaDetailModal({
         </div>
 
         {/* Meta */}
-        <div className="flex flex-wrap gap-3 mb-5 text-xs text-slate">
+        <div className="flex flex-wrap gap-3 mb-5 text-xs text-charcoal-light">
           {item.width && item.height && (
-            <span className="px-2 py-1 bg-cream dark:bg-charcoal rounded-md">
+            <span className="px-2 py-1 bg-gray-50 rounded-md">
               {item.width} × {item.height} px
             </span>
           )}
-          <span className="px-2 py-1 bg-cream dark:bg-charcoal rounded-md">
+          <span className="px-2 py-1 bg-gray-50 rounded-md">
             {formatFileSize(item.file_size)}
           </span>
-          <span className="px-2 py-1 bg-cream dark:bg-charcoal rounded-md">
+          <span className="px-2 py-1 bg-gray-50 rounded-md">
             Hochgeladen: {formatDate(item.uploaded_at)}
           </span>
         </div>
@@ -148,7 +148,7 @@ function MediaDetailModal({
         {/* Edit fields */}
         <div className="space-y-4 mb-5">
           <div>
-            <label className="block text-sm font-medium text-charcoal dark:text-white mb-1">
+            <label className="block text-sm font-medium text-charcoal mb-1">
               Titel
             </label>
             <input
@@ -159,7 +159,7 @@ function MediaDetailModal({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-charcoal dark:text-white mb-1">
+            <label className="block text-sm font-medium text-charcoal mb-1">
               Alt-Text
             </label>
             <input
@@ -172,8 +172,8 @@ function MediaDetailModal({
         </div>
 
         {/* Usage */}
-        <div className="mb-5 p-3 bg-cream dark:bg-charcoal rounded-lg text-sm text-slate">
-          <span className="font-medium text-charcoal dark:text-white">Verwendung:</span>{" "}
+        <div className="mb-5 p-3 bg-gray-50 rounded-lg text-sm text-charcoal-light">
+          <span className="font-medium text-charcoal">Verwendung:</span>{" "}
           Wird verwendet in: —
         </div>
 
@@ -194,7 +194,7 @@ function MediaDetailModal({
               </button>
               <button
                 onClick={() => setConfirmDelete(false)}
-                className="px-3 py-1.5 text-sm text-slate hover:text-charcoal dark:hover:text-white transition-colors"
+                className="px-3 py-1.5 text-sm text-charcoal-light hover:text-charcoal transition-colors"
               >
                 Abbrechen
               </button>
@@ -203,14 +203,14 @@ function MediaDetailModal({
         )}
 
         {/* Actions */}
-        <div className="flex items-center justify-between pt-4 border-t border-gold/10">
+        <div className="flex items-center justify-between pt-4 border-t border-gray-200">
           <div className="flex gap-2">
             <a
               href={item.file_url}
               download
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-2 text-sm text-slate hover:text-gold-dark hover:bg-gold/5 rounded-lg transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 text-sm text-charcoal-light hover:text-gold-dark hover:bg-gold/5 rounded-lg transition-colors"
             >
               <Download className="w-4 h-4" />
               Download
@@ -228,7 +228,7 @@ function MediaDetailModal({
           <div className="flex gap-2">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-sm text-slate hover:text-charcoal dark:hover:text-white transition-colors"
+              className="px-4 py-2 text-sm text-charcoal-light hover:text-charcoal transition-colors"
             >
               Abbrechen
             </button>
@@ -304,8 +304,8 @@ function UploadZone({ onUploaded }: { onUploaded: () => void }) {
   };
 
   return (
-    <div className="bg-white dark:bg-charcoal-light rounded-2xl p-5 shadow-elegant">
-      <h3 className="font-display text-base text-charcoal dark:text-white mb-4">
+    <div className="bg-white rounded-2xl p-5 shadow-elegant">
+      <h3 className="font-display text-base text-charcoal mb-4">
         Bilder hochladen
       </h3>
 
@@ -317,11 +317,11 @@ function UploadZone({ onUploaded }: { onUploaded: () => void }) {
         className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-default ${
           isDragging
             ? "border-gold bg-gold/5"
-            : "border-gold/30 hover:border-gold/50"
+            : "border-gray-200 hover:border-gray-200"
         }`}
       >
         <UploadCloud className="w-10 h-10 text-gold/50 mx-auto mb-3" />
-        <p className="text-sm text-slate">
+        <p className="text-sm text-charcoal-light">
           Bilder hierher ziehen oder{" "}
           <button
             type="button"
@@ -331,7 +331,7 @@ function UploadZone({ onUploaded }: { onUploaded: () => void }) {
             auswählen
           </button>
         </p>
-        <p className="text-xs text-slate-light mt-1">PNG, JPG, GIF, WebP · Mehrere Dateien möglich</p>
+        <p className="text-xs text-charcoal-light-light mt-1">PNG, JPG, GIF, WebP · Mehrere Dateien möglich</p>
         <input
           ref={fileInputRef}
           type="file"
@@ -345,10 +345,10 @@ function UploadZone({ onUploaded }: { onUploaded: () => void }) {
       {/* Selected file previews */}
       {selectedFiles.length > 0 && (
         <div className="mt-4">
-          <p className="text-xs text-slate mb-2">{selectedFiles.length} Datei{selectedFiles.length !== 1 ? "en" : ""} ausgewählt</p>
+          <p className="text-xs text-charcoal-light mb-2">{selectedFiles.length} Datei{selectedFiles.length !== 1 ? "en" : ""} ausgewählt</p>
           <div className="flex flex-wrap gap-2 mb-4">
             {selectedFiles.map((file, idx) => (
-              <div key={idx} className="relative group w-16 h-16 rounded-lg overflow-hidden bg-cream dark:bg-charcoal flex-shrink-0">
+              <div key={idx} className="relative group w-16 h-16 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0">
                 <img
                   src={URL.createObjectURL(file)}
                   alt={file.name}
@@ -471,26 +471,26 @@ export default function MediathekTab() {
       )}
 
       {/* Grid section */}
-      <div className="bg-white dark:bg-charcoal-light rounded-2xl shadow-elegant overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-elegant overflow-hidden">
         {/* Toolbar */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 border-b border-gold/10">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 border-b border-gray-200">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-light" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-light-light" />
             <input
               type="search"
               placeholder="Suche nach Titel oder Dateiname…"
               value={search}
               onChange={handleSearchChange}
-              className="w-full pl-9 pr-3 py-2 border border-gold/20 dark:border-gold/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white dark:bg-charcoal text-charcoal dark:text-white"
+              className="w-full pl-9 pr-3 py-2 border border-gray-200 dark:border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold/50 bg-white text-charcoal"
             />
           </div>
-          <div className="flex items-center gap-1 p-1 bg-cream dark:bg-charcoal rounded-lg self-end sm:self-auto">
+          <div className="flex items-center gap-1 p-1 bg-gray-50 rounded-lg self-end sm:self-auto">
             <button
               onClick={() => setViewMode("grid")}
               className={`p-1.5 rounded-md transition-colors ${
                 viewMode === "grid"
-                  ? "bg-white dark:bg-charcoal-light text-gold shadow-sm"
-                  : "text-slate hover:text-charcoal dark:hover:text-white"
+                  ? "bg-white text-gold shadow-sm"
+                  : "text-charcoal-light hover:text-charcoal"
               }`}
               title="Rasteransicht"
             >
@@ -500,8 +500,8 @@ export default function MediathekTab() {
               onClick={() => setViewMode("list")}
               className={`p-1.5 rounded-md transition-colors ${
                 viewMode === "list"
-                  ? "bg-white dark:bg-charcoal-light text-gold shadow-sm"
-                  : "text-slate hover:text-charcoal dark:hover:text-white"
+                  ? "bg-white text-gold shadow-sm"
+                  : "text-charcoal-light hover:text-charcoal"
               }`}
               title="Listenansicht"
             >
@@ -509,7 +509,7 @@ export default function MediathekTab() {
             </button>
           </div>
           {data && (
-            <span className="text-xs text-slate whitespace-nowrap">
+            <span className="text-xs text-charcoal-light whitespace-nowrap">
               {data.count} Bild{data.count !== 1 ? "er" : ""}
             </span>
           )}
@@ -517,16 +517,16 @@ export default function MediathekTab() {
 
         {/* Content */}
         {isLoading ? (
-          <div className="flex items-center justify-center py-20 text-slate gap-3">
+          <div className="flex items-center justify-center py-20 text-charcoal-light gap-3">
             <Loader2 className="w-5 h-5 animate-spin" />
             <span className="text-sm">Wird geladen…</span>
           </div>
         ) : !apiUnavailable && items.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-slate">
-            <ImageIcon className="w-12 h-12 text-slate-light mb-3" />
+          <div className="flex flex-col items-center justify-center py-20 text-charcoal-light">
+            <ImageIcon className="w-12 h-12 text-charcoal-light-light mb-3" />
             <p className="text-sm font-medium">Keine Bilder gefunden</p>
             {search && (
-              <p className="text-xs text-slate-light mt-1">
+              <p className="text-xs text-charcoal-light-light mt-1">
                 Keine Ergebnisse für „{search}"
               </p>
             )}
@@ -537,7 +537,7 @@ export default function MediathekTab() {
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="aspect-square rounded-lg overflow-hidden bg-cream dark:bg-charcoal relative group cursor-pointer"
+                  className="aspect-square rounded-lg overflow-hidden bg-gray-50 relative group cursor-pointer"
                   onClick={() => setDetailItem(item)}
                 >
                   <img
@@ -574,21 +574,21 @@ export default function MediathekTab() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gold/10 text-left">
+                  <tr className="border-b border-gray-200 text-left">
                     <th className="px-4 py-2 w-10"></th>
-                    <th className="px-4 py-2 text-xs font-medium text-slate uppercase tracking-wide">Vorschau</th>
-                    <th className="px-4 py-2 text-xs font-medium text-slate uppercase tracking-wide">Titel</th>
-                    <th className="px-4 py-2 text-xs font-medium text-slate uppercase tracking-wide hidden md:table-cell">Dimensionen</th>
-                    <th className="px-4 py-2 text-xs font-medium text-slate uppercase tracking-wide hidden md:table-cell">Dateigröße</th>
-                    <th className="px-4 py-2 text-xs font-medium text-slate uppercase tracking-wide hidden lg:table-cell">Hochgeladen</th>
-                    <th className="px-4 py-2 text-xs font-medium text-slate uppercase tracking-wide">Aktionen</th>
+                    <th className="px-4 py-2 text-xs font-medium text-charcoal-light uppercase tracking-wide">Vorschau</th>
+                    <th className="px-4 py-2 text-xs font-medium text-charcoal-light uppercase tracking-wide">Titel</th>
+                    <th className="px-4 py-2 text-xs font-medium text-charcoal-light uppercase tracking-wide hidden md:table-cell">Dimensionen</th>
+                    <th className="px-4 py-2 text-xs font-medium text-charcoal-light uppercase tracking-wide hidden md:table-cell">Dateigröße</th>
+                    <th className="px-4 py-2 text-xs font-medium text-charcoal-light uppercase tracking-wide hidden lg:table-cell">Hochgeladen</th>
+                    <th className="px-4 py-2 text-xs font-medium text-charcoal-light uppercase tracking-wide">Aktionen</th>
                   </tr>
                 </thead>
                 <tbody>
                   {items.map((item) => (
                     <tr
                       key={item.id}
-                      className="border-b border-gold/5 hover:bg-cream/30 dark:hover:bg-charcoal/30 transition-colors"
+                      className="border-b border-gray-200 hover:bg-gray-50/30/30 transition-colors"
                     >
                       <td className="px-4 py-3">
                         <button
@@ -596,7 +596,7 @@ export default function MediathekTab() {
                           className={`w-5 h-5 rounded border-2 transition-all flex items-center justify-center ${
                             selectedIds.has(item.id)
                               ? "bg-gold border-gold"
-                              : "border-gold/30 hover:border-gold"
+                              : "border-gray-200 hover:border-gold"
                           }`}
                         >
                           {selectedIds.has(item.id) && (
@@ -608,7 +608,7 @@ export default function MediathekTab() {
                       </td>
                       <td className="px-4 py-2">
                         <div
-                          className="w-12 h-12 rounded-lg overflow-hidden bg-cream dark:bg-charcoal cursor-pointer flex-shrink-0"
+                          className="w-12 h-12 rounded-lg overflow-hidden bg-gray-50 cursor-pointer flex-shrink-0"
                           onClick={() => setDetailItem(item)}
                         >
                           <img
@@ -620,27 +620,27 @@ export default function MediathekTab() {
                         </div>
                       </td>
                       <td
-                        className="px-4 py-3 font-medium text-charcoal dark:text-white cursor-pointer hover:text-gold-dark transition-colors"
+                        className="px-4 py-3 font-medium text-charcoal cursor-pointer hover:text-gold-dark transition-colors"
                         onClick={() => setDetailItem(item)}
                       >
                         <p className="line-clamp-1">{item.title || item.file.split("/").pop() || "—"}</p>
                         {item.alt_text && (
-                          <p className="text-xs text-slate font-normal line-clamp-1">{item.alt_text}</p>
+                          <p className="text-xs text-charcoal-light font-normal line-clamp-1">{item.alt_text}</p>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-slate hidden md:table-cell whitespace-nowrap">
+                      <td className="px-4 py-3 text-charcoal-light hidden md:table-cell whitespace-nowrap">
                         {item.width && item.height ? `${item.width} × ${item.height}` : "—"}
                       </td>
-                      <td className="px-4 py-3 text-slate hidden md:table-cell whitespace-nowrap">
+                      <td className="px-4 py-3 text-charcoal-light hidden md:table-cell whitespace-nowrap">
                         {formatFileSize(item.file_size)}
                       </td>
-                      <td className="px-4 py-3 text-slate hidden lg:table-cell whitespace-nowrap">
+                      <td className="px-4 py-3 text-charcoal-light hidden lg:table-cell whitespace-nowrap">
                         {formatDate(item.uploaded_at)}
                       </td>
                       <td className="px-4 py-3">
                         <button
                           onClick={() => setDetailItem(item)}
-                          className="flex items-center gap-1 px-3 py-1.5 text-xs text-slate hover:text-gold-dark hover:bg-gold/5 rounded-lg transition-colors whitespace-nowrap"
+                          className="flex items-center gap-1 px-3 py-1.5 text-xs text-charcoal-light hover:text-gold-dark hover:bg-gold/5 rounded-lg transition-colors whitespace-nowrap"
                         >
                           Details
                         </button>
@@ -655,22 +655,22 @@ export default function MediathekTab() {
 
         {/* Pagination */}
         {!apiUnavailable && totalPages > 1 && (
-          <div className="flex items-center justify-between px-4 py-3 border-t border-gold/10">
+          <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="flex items-center gap-1 px-3 py-1.5 text-sm text-slate hover:text-charcoal dark:hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1 px-3 py-1.5 text-sm text-charcoal-light hover:text-charcoal disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
               Zurück
             </button>
-            <span className="text-sm text-slate">
+            <span className="text-sm text-charcoal-light">
               Seite {page} von {totalPages}
             </span>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="flex items-center gap-1 px-3 py-1.5 text-sm text-slate hover:text-charcoal dark:hover:text-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-1 px-3 py-1.5 text-sm text-charcoal-light hover:text-charcoal disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               Weiter
               <ChevronRight className="w-4 h-4" />
@@ -698,7 +698,7 @@ export default function MediathekTab() {
               </button>
               <button
                 onClick={() => setConfirmBulkDelete(false)}
-                className="px-3 py-1.5 text-xs text-slate-light hover:text-white dark:hover:text-charcoal transition-colors"
+                className="px-3 py-1.5 text-xs text-charcoal-light-light hover:text-white dark:hover:text-charcoal transition-colors"
               >
                 Abbrechen
               </button>
@@ -714,7 +714,7 @@ export default function MediathekTab() {
           )}
           <button
             onClick={() => { setSelectedIds(new Set()); setConfirmBulkDelete(false); }}
-            className="text-slate-light hover:text-white dark:hover:text-charcoal transition-colors ml-1"
+            className="text-charcoal-light-light hover:text-white dark:hover:text-charcoal transition-colors ml-1"
           >
             <X className="w-4 h-4" />
           </button>

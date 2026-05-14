@@ -1,0 +1,54 @@
+Vorja– Erstgespräch als Real-Talk (Idee gut…Plan besser!) Mit: Sandra Kornfeld | VorJA Am:
+13.05.26 | 15:00 Uhr | Zoom Notizen: Sascha Kohler
+Hier mein Website-Konzept: VORJA (Status: 12. Mai 2026)
+1. Idee & Zielgruppe
+ Kernidee / Vision: Ein haptisch-digitales Mentoring-System für mentale
+Souveränität. Hochwertige Hardware aus Nussbaumholz dient via NFC als
+physischer „Schlüssel“ zu exklusivem Audio-Coaching (PWA).
+ Fokus: Mentaler Rollenwechsel und Resilienz.
+ Zielgruppe: Weibliche Führungskräfte (Female Leaders), High-End B2B
+(Unternehmen, HR-Abteilungen für Leadership-Teams).
+ Abgrenzung: Kein „App-Suchen“, kein Display-Zwang. VORJA ist ein Design-Objekt,
+das Rituale schaƯt. Weg von Wellness-Apps, hin zum Executive-Performance-Tool.
+ Gewünschte Wirkung: „Quiet Luxury“, minimalistisch, tiefenentspannt, aber
+autoritär. Boutique-Vibe (wie ein exklusives Interior-Studio).
+2. Produkte
+ Varianten: Initial die „Founding 50 Edition“.
+ Lieferumfang: 1 massive Nussbaum-Schatulle + 5 haptische Barren (Nussbaum
+massiv) mit Roségold-Gravur: Fokus, Resilienz, Souveränität, Konflikt, Abgrenzung.
+ Funktion: Jeder Barren triggert via NFC ein spezifisches Audio-Set
+(Morgen/Mittag/Abend) in einer PWA (Progressive Web App).
+ Personalisierung: Audio-Ansprache mit Namen (Software-seitig) und hochwertige
+Gravur auf den Barren/der Schatulle.
+ Technik-Wunsch: Nahtloser Übergang: Barren berührt Handy \(\rightarrow \) PWA
+öƯnet sich im Vollbild-Fokus-Modus (Logo auf dunklem Grund, Player startet).
+3. Design & Ästhetik
+ Farben: Dunkles Nussbaum-Braun, tiefes Schwarz (Anthrazit), Akzente in Roségold
+(Metallic-EƯekt für Gravuren/Logo).
+ Stil: Ultra-minimalistisch, „Monolith-Look“. Keine Stockfotos von lachenden
+Frauen, sondern High-End Produktfotografie (Materialfokus: Holzmaserung,
+Metallglanz).
+ Referenzen: Apple (Produktdarstellung), Schmuckbrands (Cartier/TiƯany),
+hochwertige Interior-Brands (z.B. Vitra oder Vipp)
+4. Seiten & Inhalte
+ Startseite: Emotionales Storytelling, Fokus auf das haptische Erlebnis und das
+„Warum“.
+ Das Set: Detailvorstellung der 5 Ankerpunkte und deren psychologische Wirkung.
+ Die VORJA-Philosophie: Background (Dipl. LSB), der wissenschaftliche Ansatz
+(Neuropsychologie/Haptik).
+ B2B-Solutions: Spezifischer Bereich für Unternehmen (Team-Pakete, Workshops).
+ Shop: Exklusiver Checkout für die Founding 50 Edition zB: Exemplar reservieren.
+ Journal: Blog für Leadership-Content & Resilienz (SEO-Anker). zB: 1. „Die
+Architektur der Entscheidung: Warum Souveränität Stille braucht.“ 2. „Der
+unsichtbare Mantel: Die Psychologie der Abgrenzung im Leadership.“ 3. „Jenseits
+der Belastbarkeit: Resilienz als Wettbewerbsvorteil.“
+5. Technik & Administration
+ PWA-Entwicklung: Die Website und die Audio-Plattform (PWA) müssen eine Einheit
+bilden. Der Player muss stabil, minimalistisch und "oƯline-fähig" wirken.
+ CMS: Einfache Pflege durch mich (Shopify oder Webflow bevorzugt).
+ NFC-Logik: Jeder Barren hat eine eindeutige URL, die direkt das entsprechende
+Audio-Modul in der PWA aufruft.
+6. Zeitplan & Budget
+ Deadline: Launch der Founding 50 Edition (Ziel: Herbst 2026 bzw. nach
+Förderzusage).
+ Budget: Richtet sich nach der Förderhöhe (wird im Gespräch definiert).

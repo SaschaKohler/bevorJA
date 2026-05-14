@@ -3,20 +3,21 @@ import type { CustomSection } from "@/types";
 
 interface Testimonial {
   name: string;
+  company?: string;
   text: string;
   rating?: number;
 }
 
 export default function SectionTestimonials({ section }: { section: CustomSection }) {
-  const c = section.content as { headline?: string; items?: Testimonial[] };
-  const items = c.items || [];
+  const c = section.content as { title?: string; testimonials?: Testimonial[] };
+  const items = c.testimonials || [];
 
   return (
     <section id={section.anchor} className="py-24 bg-cream">
       <div className="max-w-6xl mx-auto px-4">
-        {c.headline && (
+        {c.title && (
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl text-charcoal mb-4">{c.headline}</h2>
+            <h2 className="font-display text-4xl text-charcoal mb-4">{c.title}</h2>
             <div className="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto" />
           </div>
         )}
@@ -30,6 +31,7 @@ export default function SectionTestimonials({ section }: { section: CustomSectio
               </div>
               <p className="text-slate leading-relaxed mb-6 italic">&ldquo;{item.text}&rdquo;</p>
               <p className="font-serif text-charcoal font-medium">{item.name}</p>
+              {item.company && <p className="text-sm text-slate-light">{item.company}</p>}
             </div>
           ))}
         </div>

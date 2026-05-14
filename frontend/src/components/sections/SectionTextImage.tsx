@@ -17,11 +17,11 @@ export default function SectionTextImage({ section }: { section: CustomSection }
           )}
         </div>
         <div className={`${isLeft ? "order-1 md:order-2" : "order-1"} text-left`} style={{ direction: "ltr" }}>
-          {c.headline && <h2 className="font-display text-4xl text-charcoal mb-6">{c.headline}</h2>}
+          {c.title && <h2 className="font-display text-4xl text-charcoal mb-6">{c.title}</h2>}
           {c.text && <p className="text-slate text-lg leading-relaxed mb-8">{c.text}</p>}
-          {c.button_text && c.button_url && (
-            <a href={c.button_url} className="btn-elegant inline-flex items-center gap-2">
-              {c.button_text}
+          {c.cta_text && c.cta_link && (
+            <a href={c.cta_link} className="btn-elegant inline-flex items-center gap-2">
+              {c.cta_text}
               <ArrowRight className="w-5 h-5" />
             </a>
           )}

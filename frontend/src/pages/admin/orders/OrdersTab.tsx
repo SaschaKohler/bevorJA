@@ -70,15 +70,15 @@ function OrderDetailModal({ order, onClose, onStatusUpdate, isUpdating }: OrderD
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center p-4 overflow-y-auto">
-      <div className="bg-white dark:bg-charcoal-light rounded-2xl shadow-elegant p-6 w-full max-w-2xl mt-4">
+      <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 w-full max-w-2xl mt-4">
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
           <div>
-            <h2 className="font-display text-xl text-charcoal dark:text-white font-bold">
+            <h2 className="font-display text-xl text-charcoal font-bold">
               Bestellung #{order.order_number.slice(0, 8)}
             </h2>
             <div className="flex items-center gap-3 mt-2">
-              <span className="text-sm text-slate flex items-center gap-1">
+              <span className="text-sm text-charcoal-light flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
                 {format(new Date(order.created_at), "dd.MM.yyyy HH:mm", { locale: de })}
               </span>
@@ -89,7 +89,7 @@ function OrderDetailModal({ order, onClose, onStatusUpdate, isUpdating }: OrderD
           </div>
           <button
             onClick={onClose}
-            className="text-slate hover:text-charcoal dark:hover:text-white transition-colors"
+            className="text-charcoal-light hover:text-rose-gold transition-colors p-1 hover:bg-rose-gold/10 rounded-lg"
           >
             <X className="w-6 h-6" />
           </button>
@@ -97,16 +97,16 @@ function OrderDetailModal({ order, onClose, onStatusUpdate, isUpdating }: OrderD
 
         {/* Customer Section */}
         <div className="mb-6">
-          <h3 className="font-semibold text-charcoal dark:text-white mb-3 flex items-center gap-2">
+          <h3 className="font-semibold text-charcoal mb-3 flex items-center gap-2">
             <User className="w-5 h-5" />
             Kundendaten
           </h3>
-          <div className="bg-cream dark:bg-charcoal rounded-lg p-4 space-y-2">
-            <p className="text-charcoal dark:text-white font-medium">
+          <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+            <p className="text-charcoal font-medium">
               {order.first_name} {order.last_name}
             </p>
             <div className="flex items-center gap-2">
-              <p className="text-slate text-sm">{order.email}</p>
+              <p className="text-charcoal-light text-sm">{order.email}</p>
               <button
                 onClick={() => copyToClipboard(order.email)}
                 className="text-gold hover:text-gold-dark transition-colors"
@@ -115,9 +115,9 @@ function OrderDetailModal({ order, onClose, onStatusUpdate, isUpdating }: OrderD
               </button>
             </div>
             {order.phone && (
-              <p className="text-slate text-sm">{order.phone}</p>
+              <p className="text-charcoal-light text-sm">{order.phone}</p>
             )}
-            <p className="text-slate text-sm">
+            <p className="text-charcoal-light text-sm">
               {order.street}, {order.zip_code} {order.city}, {order.country}
             </p>
           </div>
@@ -125,40 +125,40 @@ function OrderDetailModal({ order, onClose, onStatusUpdate, isUpdating }: OrderD
 
         {/* Order Items Section */}
         <div className="mb-6">
-          <h3 className="font-semibold text-charcoal dark:text-white mb-3 flex items-center gap-2">
+          <h3 className="font-semibold text-charcoal mb-3 flex items-center gap-2">
             <Package className="w-5 h-5" />
             Bestellte Artikel
           </h3>
-          <div className="bg-cream dark:bg-charcoal rounded-lg overflow-hidden">
+          <div className="bg-gray-50 rounded-lg overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-gold/10">
+              <thead className="bg-gray-100">
                 <tr>
-                  <th className="text-left py-2 px-3 text-slate font-medium">Produkt</th>
-                  <th className="text-center py-2 px-3 text-slate font-medium">Menge</th>
-                  <th className="text-right py-2 px-3 text-slate font-medium">Einzelpreis</th>
-                  <th className="text-right py-2 px-3 text-slate font-medium">Zwischensumme</th>
+                  <th className="text-left py-2 px-3 text-charcoal-light font-medium">Produkt</th>
+                  <th className="text-center py-2 px-3 text-charcoal-light font-medium">Menge</th>
+                  <th className="text-right py-2 px-3 text-charcoal-light font-medium">Einzelpreis</th>
+                  <th className="text-right py-2 px-3 text-charcoal-light font-medium">Zwischensumme</th>
                 </tr>
               </thead>
               <tbody>
                 {order.items.map((item) => (
-                  <tr key={item.id} className="border-t border-gold/10">
-                    <td className="py-2 px-3 text-charcoal dark:text-white">
+                  <tr key={item.id} className="border-t border-gray-200">
+                    <td className="py-2 px-3 text-charcoal">
                       {item.product_detail.name}
                     </td>
-                    <td className="py-2 px-3 text-center text-slate">{item.quantity}</td>
-                    <td className="py-2 px-3 text-right text-slate">€{item.price}</td>
-                    <td className="py-2 px-3 text-right text-charcoal dark:text-white font-medium">
+                    <td className="py-2 px-3 text-center text-charcoal-light">{item.quantity}</td>
+                    <td className="py-2 px-3 text-right text-charcoal-light">€{item.price}</td>
+                    <td className="py-2 px-3 text-right text-charcoal font-medium">
                       €{item.subtotal}
                     </td>
                   </tr>
                 ))}
               </tbody>
-              <tfoot className="bg-gold/10">
+              <tfoot className="bg-gray-100">
                 <tr>
-                  <td colSpan={3} className="py-2 px-3 text-charcoal dark:text-white font-semibold">
+                  <td colSpan={3} className="py-2 px-3 text-charcoal font-semibold">
                     Gesamtsumme
                   </td>
-                  <td className="py-2 px-3 text-right text-charcoal dark:text-white font-bold">
+                  <td className="py-2 px-3 text-right text-charcoal font-bold">
                     €{order.total}
                   </td>
                 </tr>
@@ -170,24 +170,24 @@ function OrderDetailModal({ order, onClose, onStatusUpdate, isUpdating }: OrderD
         {/* Customization Section */}
         {order.customization_details && (
           <div className="mb-6">
-            <h3 className="font-semibold text-charcoal dark:text-white mb-3">Personalisierung</h3>
-            <div className="bg-cream dark:bg-charcoal rounded-lg p-4 space-y-2">
+            <h3 className="font-semibold text-charcoal mb-3">Personalisierung</h3>
+            <div className="bg-gray-50 rounded-lg p-4 space-y-2">
               {order.customization_details.engraving && (
                 <div>
-                  <span className="text-sm font-medium text-slate">Gravur:</span>
-                  <p className="text-charcoal dark:text-white">{order.customization_details.engraving}</p>
+                  <span className="text-sm font-medium text-charcoal-light">Gravur:</span>
+                  <p className="text-charcoal">{order.customization_details.engraving}</p>
                 </div>
               )}
               {order.customization_details.box_color && (
                 <div>
-                  <span className="text-sm font-medium text-slate">Boxfarbe:</span>
-                  <p className="text-charcoal dark:text-white">{order.customization_details.box_color}</p>
+                  <span className="text-sm font-medium text-charcoal-light">Boxfarbe:</span>
+                  <p className="text-charcoal">{order.customization_details.box_color}</p>
                 </div>
               )}
               {order.customization_details.selected_design && (
                 <div>
-                  <span className="text-sm font-medium text-slate">Design:</span>
-                  <p className="text-charcoal dark:text-white">{order.customization_details.selected_design}</p>
+                  <span className="text-sm font-medium text-charcoal-light">Design:</span>
+                  <p className="text-charcoal">{order.customization_details.selected_design}</p>
                 </div>
               )}
             </div>
@@ -197,7 +197,7 @@ function OrderDetailModal({ order, onClose, onStatusUpdate, isUpdating }: OrderD
         {/* Status Workflow Section */}
         {allowedTransitions.length > 0 && (
           <div className="mb-6">
-            <h3 className="font-semibold text-charcoal dark:text-white mb-3">Status ändern</h3>
+            <h3 className="font-semibold text-charcoal mb-3">Status ändern</h3>
             <div className="flex flex-wrap gap-2">
               {allowedTransitions.map((status) => (
                 <button
@@ -215,33 +215,33 @@ function OrderDetailModal({ order, onClose, onStatusUpdate, isUpdating }: OrderD
 
         {/* Status Change Form */}
         {showStatusForm && (
-          <div className="bg-cream dark:bg-charcoal rounded-lg p-4 mb-6">
-            <h4 className="font-medium text-charcoal dark:text-white mb-3">
+          <div className="bg-gray-50 rounded-lg p-4 mb-6">
+            <h4 className="font-medium text-charcoal mb-3">
               Status ändern zu: {statusLabels[newStatus]}
             </h4>
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-slate mb-1">
+                <label className="block text-sm font-medium text-charcoal-light mb-1">
                   Kommentar (optional)
                 </label>
                 <textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  className="w-full px-3 py-2 border border-gold/20 rounded-lg text-sm resize-none"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm resize-none"
                   rows={3}
                   placeholder="Interner Kommentar..."
                 />
               </div>
               {newStatus === "shipped" && (
                 <div>
-                  <label className="block text-sm font-medium text-slate mb-1">
+                  <label className="block text-sm font-medium text-charcoal-light mb-1">
                     Tracking-Nummer
                   </label>
                   <input
                     type="text"
                     value={trackingNumber}
                     onChange={(e) => setTrackingNumber(e.target.value)}
-                    className="w-full px-3 py-2 border border-gold/20 rounded-lg text-sm"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm"
                     placeholder="Tracking-Nummer..."
                   />
                 </div>
@@ -268,9 +268,9 @@ function OrderDetailModal({ order, onClose, onStatusUpdate, isUpdating }: OrderD
         {/* Notes */}
         {order.notes && (
           <div>
-            <h3 className="font-semibold text-charcoal dark:text-white mb-3">Notizen</h3>
-            <div className="bg-cream dark:bg-charcoal rounded-lg p-4">
-              <p className="text-slate">{order.notes}</p>
+            <h3 className="font-semibold text-charcoal mb-3">Notizen</h3>
+            <div className="bg-gray-50 rounded-lg p-4">
+              <p className="text-charcoal-light">{order.notes}</p>
             </div>
           </div>
         )}
@@ -388,7 +388,7 @@ export default function OrdersTab() {
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 animate-spin text-gold" />
         </div>
-        <div className="bg-white dark:bg-charcoal-light rounded-xl p-4 space-y-4">
+        <div className="bg-white rounded-xl p-4 space-y-4">
           <div className="h-4 bg-slate/20 rounded animate-pulse"></div>
           <div className="h-4 bg-slate/20 rounded animate-pulse w-3/4"></div>
         </div>
@@ -399,21 +399,21 @@ export default function OrdersTab() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl text-charcoal dark:text-white">Bestellungen</h1>
-        <p className="text-slate mt-1">
+        <h1 className="font-display text-2xl text-charcoal">Bestellungen</h1>
+        <p className="text-charcoal-light mt-1">
           Verwalten Sie Kundenbestellungen und deren Status ({ordersData?.count || 0} Gesamt)
         </p>
       </div>
 
       {/* Filters */}
-      <div className="bg-white dark:bg-charcoal-light rounded-xl p-4 space-y-4">
-        <div className="flex items-center gap-2 text-slate mb-2">
+      <div className="bg-white rounded-xl p-4 space-y-4">
+        <div className="flex items-center gap-2 text-charcoal-light mb-2">
           <Filter className="w-5 h-5" />
           <span className="font-medium">Filter</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-charcoal-light" />
             <input
               type="text"
               value={searchQuery}
@@ -422,7 +422,7 @@ export default function OrdersTab() {
                 setPage(1);
               }}
               placeholder="Suche (Name, Email, Nr.)"
-              className="w-full pl-9 pr-3 py-2 border border-gold/20 rounded-lg text-sm"
+              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm"
             />
           </div>
           <select
@@ -431,7 +431,7 @@ export default function OrdersTab() {
               setStatusFilter(e.target.value);
               setPage(1);
             }}
-            className="px-3 py-2 border border-gold/20 rounded-lg text-sm"
+            className="px-3 py-2 border border-gray-200 rounded-lg text-sm"
           >
             <option value="">Alle Status</option>
             {Object.entries(statusLabels).map(([key, label]) => (
@@ -445,7 +445,7 @@ export default function OrdersTab() {
               setDateFrom(e.target.value);
               setPage(1);
             }}
-            className="px-3 py-2 border border-gold/20 rounded-lg text-sm"
+            className="px-3 py-2 border border-gray-200 rounded-lg text-sm"
             placeholder="Von"
           />
           <input
@@ -455,43 +455,43 @@ export default function OrdersTab() {
               setDateTo(e.target.value);
               setPage(1);
             }}
-            className="px-3 py-2 border border-gold/20 rounded-lg text-sm"
+            className="px-3 py-2 border border-gray-200 rounded-lg text-sm"
             placeholder="Bis"
           />
         </div>
       </div>
 
       {/* Orders Table */}
-      <div className="bg-white dark:bg-charcoal-light rounded-xl overflow-hidden shadow-elegant">
+      <div className="bg-white rounded-xl overflow-hidden shadow-elegant">
         <table className="w-full text-sm">
-          <thead className="bg-cream dark:bg-charcoal border-b border-gold/10">
+          <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
-              <th className="text-left py-3 px-4 text-slate font-medium">Bestellung</th>
-              <th className="text-left py-3 px-4 text-slate font-medium">Kunde</th>
-              <th className="text-left py-3 px-4 text-slate font-medium">Datum</th>
-              <th className="text-left py-3 px-4 text-slate font-medium">Betrag</th>
-              <th className="text-left py-3 px-4 text-slate font-medium">Status</th>
-              <th className="text-left py-3 px-4 text-slate font-medium">Aktionen</th>
+              <th className="text-left py-3 px-4 text-charcoal-light font-medium">Bestellung</th>
+              <th className="text-left py-3 px-4 text-charcoal-light font-medium">Kunde</th>
+              <th className="text-left py-3 px-4 text-charcoal-light font-medium">Datum</th>
+              <th className="text-left py-3 px-4 text-charcoal-light font-medium">Betrag</th>
+              <th className="text-left py-3 px-4 text-charcoal-light font-medium">Status</th>
+              <th className="text-left py-3 px-4 text-charcoal-light font-medium">Aktionen</th>
             </tr>
           </thead>
           <tbody>
             {ordersData?.results?.map((order) => (
               <tr 
                 key={order.id} 
-                className="border-b border-gold/5 hover:bg-cream/30 cursor-pointer"
+                className="border-b border-gray-200 hover:bg-gray-50/30 cursor-pointer"
                 onClick={() => setSelectedOrderId(order.id)}
               >
                 <td className="py-3 px-4">
-                  <span className="font-mono text-xs text-slate">#{order.order_number.slice(0, 8)}</span>
+                  <span className="font-mono text-xs text-charcoal-light">#{order.order_number.slice(0, 8)}</span>
                 </td>
                 <td className="py-3 px-4">
-                  <p className="text-charcoal dark:text-white font-medium">{order.first_name} {order.last_name}</p>
-                  <p className="text-xs text-slate">{order.email}</p>
+                  <p className="text-charcoal font-medium">{order.first_name} {order.last_name}</p>
+                  <p className="text-xs text-charcoal-light">{order.email}</p>
                 </td>
-                <td className="py-3 px-4 text-slate">
+                <td className="py-3 px-4 text-charcoal-light">
                   {format(new Date(order.created_at), "dd.MM.yyyy", { locale: de })}
                 </td>
-                <td className="py-3 px-4 text-charcoal dark:text-white font-medium">
+                <td className="py-3 px-4 text-charcoal font-medium">
                   €{order.total}
                 </td>
                 <td className="py-3 px-4">
@@ -518,8 +518,8 @@ export default function OrdersTab() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between bg-white dark:bg-charcoal-light rounded-xl p-4">
-          <div className="text-sm text-slate">
+        <div className="flex items-center justify-between bg-white rounded-xl p-4">
+          <div className="text-sm text-charcoal-light">
             Seite {page} von {totalPages}
           </div>
           <div className="flex items-center gap-2">
@@ -544,9 +544,9 @@ export default function OrdersTab() {
       )}
 
       {!ordersData?.results?.length && (
-        <div className="text-center py-12 bg-white dark:bg-charcoal-light rounded-xl">
-          <ShoppingBag className="w-12 h-12 text-slate-light mx-auto mb-4" />
-          <p className="text-slate">Keine Bestellungen gefunden</p>
+        <div className="text-center py-12 bg-white rounded-xl">
+          <ShoppingBag className="w-12 h-12 text-charcoal-light-light mx-auto mb-4" />
+          <p className="text-charcoal-light">Keine Bestellungen gefunden</p>
         </div>
       )}
 
@@ -565,7 +565,7 @@ export default function OrdersTab() {
       {/* Detail Loading Skeleton */}
       {isDetailLoading && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center p-4 overflow-y-auto">
-          <div className="bg-white dark:bg-charcoal-light rounded-2xl shadow-elegant p-6 w-full max-w-2xl mt-4">
+          <div className="bg-white rounded-2xl shadow-elegant p-6 w-full max-w-2xl mt-4">
             <div className="animate-pulse space-y-4">
               <div className="h-6 bg-slate/20 rounded w-3/4"></div>
               <div className="h-4 bg-slate/20 rounded w-1/2"></div>
